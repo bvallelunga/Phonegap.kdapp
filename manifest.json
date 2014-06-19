@@ -1,0 +1,32 @@
+{
+  "background": false,
+  "behavior": "application",
+  "version": "0.1",
+  "title": "Phonegap",
+  "name": "Phonegap",
+  "identifier": "com.koding.apps.phonegap",
+  "path": "~/Applications/Phonegap.kdapp",
+  "homepage": "bvallelunga.kd.io/phonegap",
+  "repository": "git://github.com/bvallelunga/phonegap.kdapp.git",
+  "description": "Phonegap : a Koding application created with the blank template.",
+  "category": "web-app",
+  "source": {
+    "blocks": {
+      "app": {
+        "files": [
+          "./index.coffee"
+        ]
+      }
+    },
+    "stylesheets": [
+      "./resources/style.css"
+    ]
+  },
+  "options": {
+    "type": "tab"
+  },
+  "icns": {
+    "128": "./resources/icon.128.png"
+  },
+  "fileTypes": []
+}
