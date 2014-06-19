@@ -1,4 +1,4 @@
-/* Compiled by kdc on Thu Jun 19 2014 23:18:48 GMT+0000 (UTC) */
+/* Compiled by kdc on Thu Jun 19 2014 23:43:03 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -38,7 +38,7 @@ PhonegapMainView = (function(_super) {
 
   phoneGapBin = "/usr/bin/phonegap";
 
-  installerScript = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/newInstaller.sh";
+  installerScript = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/installer.sh";
 
   png = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/phonegap.png";
 
@@ -112,7 +112,6 @@ PhonegapMainView = (function(_super) {
       _this.link.startServer = function() {
         var port;
         port = Math.round(Math.random() * (4000 - 3000) + 3000);
-        console.log(this.parent, this.parent.terminal.runCommand);
         this.parent.terminal.runCommand("cd ~/PhoneGap/HelloWorld; /usr/bin/phonegap serve --port " + port);
         this.updatePartial("Click here to launch PhoneGap: <a target='_blank' href='http://" + domain + ":" + port + "'>http://" + domain + ":" + port + "</a>");
         return this.show();
@@ -140,7 +139,6 @@ PhonegapMainView = (function(_super) {
         return _this.switchState('install');
       } else {
         _this.progress.updateBar(100, '%', "PhoneGap is installed.");
-        _this.link.startServer();
         return _this.switchState('ready');
       }
     });
@@ -169,6 +167,7 @@ PhonegapMainView = (function(_super) {
         });
         break;
       case 'run':
+        this.link.startServer();
         this.button.hide();
     }
     this.button.unsetClass('red green');
@@ -193,24 +192,30 @@ PhonegapMainView = (function(_super) {
         _this.toggle.setState('Show details');
         _this.terminal.unsetClass('in');
         _this.toggle.unsetClass('toggle');
-        _this.link.startServer();
-        return _this.switchState('run');
-      } else if (percentage === "0") {
+        return _this.switchState('ready');
+      } else if (percentage === "80") {
         _this.toggle.setState('Hide details');
+        _this.terminal.setClass('in');
+        return _this.toggle.setClass('toggle');
+      } else if (percentage === "40") {
+        _this.toggle.setState('Show details');
         _this.terminal.setClass('in');
         _this.toggle.setClass('toggle');
         return _this.terminal.webterm.setKeyView();
+      } else if (percentage === "0") {
+        _this.toggle.setState('Hide details');
+        _this.terminal.setClass('in');
+        return _this.toggle.setClass('toggle');
       }
     });
     session = (Math.random() + 1).toString(36).substring(7);
-    tmpOutPath = "" + OutPath + "/" + session;
+    tmpOutPath = "" + outPath + "/" + session;
     vmc = KD.getSingleton('vmController');
-    return vmc.run("rm -rf " + OutPath + "; mkdir -p " + tmpOutPath, function() {
+    return vmc.run("rm -rf " + outPath + "; mkdir -p " + tmpOutPath, function() {
       _this.watcher.stopWatching();
       _this.watcher.path = tmpOutPath;
       _this.watcher.watch();
-      console.log(_this.terminal.runCommand);
-      return _this.terminal.runCommand("bash <(curl --silent " + installerScript + ") " + session + " " + user);
+      return _this.terminal.runCommand("curl --silent " + installerScript + " | bash -s " + session + " " + user);
     });
   };
 

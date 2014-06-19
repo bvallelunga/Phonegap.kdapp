@@ -18,7 +18,7 @@ sudo npm install -g phonegap
 #Create Demo Project
 touch $OUT/"80-Creating PhoneGap Project"
 mkdir -p ~/PhoneGap
-/usr/bin/phonegap create hello com.$2.hello ~/PhoneGap/HelloWorld
+/usr/bin/phonegap create ~/PhoneGap/hello com.$2.hello HelloWorld
 
 #Finished Install
 touch $OUT/"100-PhoneGap installation completed."

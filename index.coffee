@@ -13,7 +13,7 @@ class PhonegapMainView extends KDView
   domain          = "#{user}.kd.io"
   outPath         = "/tmp/_PhoneGapinstaller.out"
   phoneGapBin     = "/usr/bin/phonegap"
-  installerScript = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/newInstaller.sh"
+  installerScript = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/installer.sh"
   png             = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/phonegap.png"
 
   constructor:(options = {}, data)->
@@ -75,7 +75,6 @@ class PhonegapMainView extends KDView
         
       @link.startServer = ()->
         port = Math.round  Math.random() * (4000 - 3000) + 3000
-        console.log @parent, @parent.terminal.runCommand
         @parent.terminal.runCommand "cd ~/PhoneGap/HelloWorld; /usr/bin/phonegap serve --port #{port}"
         @updatePartial "Click here to launch PhoneGap: <a target='_blank' href='http://#{domain}:#{port}'>http://#{domain}:#{port}</a>"
         @show()
@@ -143,22 +142,31 @@ class PhonegapMainView extends KDView
         @terminal.unsetClass 'in'
         @toggle.unsetClass 'toggle'
         @switchState 'ready'
+      
+      else if percentage is "80"
+        @toggle.setState 'Hide details'
+        @terminal.setClass 'in'
+        @toggle.setClass 'toggle'
         
+      else if percentage is "40"
+        @toggle.setState 'Show details'
+        @terminal.setClass 'in'
+        @toggle.setClass 'toggle'
+        @terminal.webterm.setKeyView()
+      
       else if percentage is "0"
         @toggle.setState 'Hide details'
         @terminal.setClass 'in'
         @toggle.setClass 'toggle'
-        @terminal.webterm.setKeyView()
 
     session = (Math.random() + 1).toString(36).substring 7
-    tmpOutPath = "#{OutPath}/#{session}"
+    tmpOutPath = "#{outPath}/#{session}"
     vmc = KD.getSingleton 'vmController'
-    vmc.run "rm -rf #{OutPath}; mkdir -p #{tmpOutPath}", =>
+    vmc.run "rm -rf #{outPath}; mkdir -p #{tmpOutPath}", =>
       @watcher.stopWatching()
       @watcher.path = tmpOutPath
       @watcher.watch()
-      console.log @terminal.runCommand
-      @terminal.runCommand "bash <(curl --silent #{installerScript}) #{session} #{user}"
+      @terminal.runCommand "curl --silent #{installerScript} | bash -s #{session} #{user}"
 
 class PhonegapController extends AppController
 
