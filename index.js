@@ -1,4 +1,4 @@
-/* Compiled by kdc on Thu Jun 19 2014 22:42:43 GMT+0000 (UTC) */
+/* Compiled by kdc on Thu Jun 19 2014 23:18:48 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -26,7 +26,7 @@ LogWatcher = (function(_super) {
 })(FSWatcher);
 
 PhonegapMainView = (function(_super) {
-  var domain, firstApp, installerScript, outPath, phoneGapBin, png, user;
+  var domain, installerScript, outPath, phoneGapBin, png, user;
 
   __extends(PhonegapMainView, _super);
 
@@ -41,8 +41,6 @@ PhonegapMainView = (function(_super) {
   installerScript = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/newInstaller.sh";
 
   png = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/phonegap.png";
-
-  firstApp = "" + phoneGapBin + " create hello com." + user + ".hello HelloWorld";
 
   function PhonegapMainView(options, data) {
     if (options == null) {
@@ -113,7 +111,9 @@ PhonegapMainView = (function(_super) {
       }));
       _this.link.startServer = function() {
         var port;
-        port = Math.random() * (4000 - 3000) + 3000;
+        port = Math.round(Math.random() * (4000 - 3000) + 3000);
+        console.log(this.parent, this.parent.terminal.runCommand);
+        this.parent.terminal.runCommand("cd ~/PhoneGap/HelloWorld; /usr/bin/phonegap serve --port " + port);
         this.updatePartial("Click here to launch PhoneGap: <a target='_blank' href='http://" + domain + ":" + port + "'>http://" + domain + ":" + port + "</a>");
         return this.show();
       };
@@ -134,14 +134,14 @@ PhonegapMainView = (function(_super) {
       if (err) {
         warn(err);
       }
-      if (PhoneGap) {
+      if (!PhoneGap) {
         _this.link.hide();
         _this.progress.updateBar(100, '%', "PhoneGap is not installed.");
         return _this.switchState('install');
       } else {
         _this.progress.updateBar(100, '%', "PhoneGap is installed.");
         _this.link.startServer();
-        return _this.switchState('run');
+        return _this.switchState('ready');
       }
     });
   };
@@ -159,6 +159,13 @@ PhonegapMainView = (function(_super) {
         style = '';
         this.button.setCallback(function() {
           return _this.installCallback();
+        });
+        break;
+      case 'ready':
+        title = 'Run PhoneGap';
+        style = '';
+        this.button.setCallback(function() {
+          return _this.switchState('run');
         });
         break;
       case 'run':
@@ -202,7 +209,8 @@ PhonegapMainView = (function(_super) {
       _this.watcher.stopWatching();
       _this.watcher.path = tmpOutPath;
       _this.watcher.watch();
-      return _this.terminal.runCommand("bash <(curl --silent " + installerScript + ") " + session);
+      console.log(_this.terminal.runCommand);
+      return _this.terminal.runCommand("bash <(curl --silent " + installerScript + ") " + session + " " + user);
     });
   };
 

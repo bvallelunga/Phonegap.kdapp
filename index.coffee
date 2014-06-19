@@ -75,7 +75,8 @@ class PhonegapMainView extends KDView
         
       @link.startServer = ()->
         port = Math.round  Math.random() * (4000 - 3000) + 3000
-        @terminal.runCommand "cd ~/PhoneGap/HelloWorld; /usr/bin/phonegap serve --port #{port}"
+        console.log @parent, @parent.terminal.runCommand
+        @parent.terminal.runCommand "cd ~/PhoneGap/HelloWorld; /usr/bin/phonegap serve --port #{port}"
         @updatePartial "Click here to launch PhoneGap: <a target='_blank' href='http://#{domain}:#{port}'>http://#{domain}:#{port}</a>"
         @show()
 
@@ -103,7 +104,6 @@ class PhonegapMainView extends KDView
         @switchState 'install'
       else
         @progress.updateBar 100, '%', "PhoneGap is installed."
-        @link.startServer()
         @switchState 'ready'
         
   switchState:(state = 'run')->
@@ -120,6 +120,7 @@ class PhonegapMainView extends KDView
         style = ''
         @button.setCallback => @switchState 'run'
       when 'run'
+        @link.startServer()
         @button.hide()
 
     @button.unsetClass 'red green'
@@ -141,8 +142,7 @@ class PhonegapMainView extends KDView
         @toggle.setState 'Show details'
         @terminal.unsetClass 'in'
         @toggle.unsetClass 'toggle'
-        @link.startServer()
-        @switchState 'run'
+        @switchState 'ready'
         
       else if percentage is "0"
         @toggle.setState 'Hide details'
@@ -157,6 +157,7 @@ class PhonegapMainView extends KDView
       @watcher.stopWatching()
       @watcher.path = tmpOutPath
       @watcher.watch()
+      console.log @terminal.runCommand
       @terminal.runCommand "bash <(curl --silent #{installerScript}) #{session} #{user}"
 
 class PhonegapController extends AppController
