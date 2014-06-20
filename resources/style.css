@@ -118,34 +118,36 @@
   background: #1B2224;
 }
 
-.phonegap .work-container .iframe {
+.phonegap .work-container .iframe-view {
   position: absolute;
   right: 0;
   top: 55px;
   height: calc(100% - 55px);
-  width :50%
+  width :40%
 }
 
-.phonegap .work-container .textEditor {
+.phonegap .work-container .editor-view {
   position: absolute;
   left:0;
   top:55px;
-  width:50%;
-  height: calc(50% + 50px);
+  width:60%;
+  height: calc(50% + 70px);
 }
 
-.phonegap .work-container .terminalView {
+.phonegap .work-container .terminal-view {
+  position: absolute;
   background:#333;
-  top: calc(50% + 77px); 
-  height: calc(50% - 79px);  
+  top: calc(50% + 127px); 
+  height: calc(50% - 129px);  
   left: 0;
-  width:50%;
+  width:60%;
 }
 
 .phonegap .work-container .inner-header {
   background: #282F31 !important;
   border-bottom: 1px solid #185334 !important;
 }
+
 .phonegap .work-container .inner-header .title {
   display: inline-block;
   float: left;

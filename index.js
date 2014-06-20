@@ -1,8 +1,8 @@
-/* Compiled by kdc on Fri Jun 20 2014 20:59:06 GMT+0000 (UTC) */
+/* Compiled by kdc on Fri Jun 20 2014 22:59:46 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
-var EditorView, FinderView, LogWatcher, PhonegapController, PhonegapMainView, _ref,
+var EditorView, FinderView, LogWatcher, PhonegapController, PhonegapMainView, TerminalView, _ref,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -24,6 +24,21 @@ LogWatcher = (function(_super) {
   return LogWatcher;
 
 })(FSWatcher);
+
+TerminalView = (function(_super) {
+  __extends(TerminalView, _super);
+
+  function TerminalView(options, data) {
+    if (options == null) {
+      options = {};
+    }
+    TerminalView.__super__.constructor.call(this, options, data);
+    this.addSubView(this.terminal = new TerminalPane);
+  }
+
+  return TerminalView;
+
+})(KDView);
 
 FinderView = (function(_super) {
   __extends(FinderView, _super);
@@ -264,11 +279,11 @@ PhonegapMainView = (function(_super) {
     return KD.singletons.appManager.require('Terminal', function() {
       _this.addSubView(_this.workContainer = new KDCustomHTMLView({
         tagName: "div",
-        cssClass: "work-container hidden"
+        cssClass: "work-container"
       }));
       _this.workContainer.addSubView(new KDCustomHTMLView({
         tagName: "iframe",
-        cssClass: "iframe",
+        cssClass: "iframe-view",
         attributes: {
           src: ""
         }
@@ -276,7 +291,7 @@ PhonegapMainView = (function(_super) {
       _this.workContainer.addSubView(_this.workEditor = new Workspace({
         title: "Text Editor",
         name: "TextEditor",
-        cssClass: "textEditor",
+        cssClass: "editor-view",
         panels: [
           {
             title: "Text Editor",
@@ -299,10 +314,27 @@ PhonegapMainView = (function(_super) {
           }
         ]
       }));
-      _this.workContainer.addSubView(_this.workTerminal = new TerminalPane({
+      _this.workContainer.addSubView(_this.workTerminal = new Workspace({
         title: "Terminal",
         name: "Terminal",
-        cssClass: 'terminalView'
+        cssClass: "terminal-view",
+        panels: [
+          {
+            title: "Terminal",
+            layout: {
+              direction: "vertical",
+              sizes: ["100%", null],
+              splitName: "BaseSplit",
+              views: [
+                {
+                  type: "custom",
+                  name: "Terminal",
+                  paneClass: TerminalView
+                }
+              ]
+            }
+          }
+        ]
       }));
       _this.workEditor.once("viewAppended", function() {
         var JSEditor;
@@ -377,6 +409,18 @@ PhonegapMainView = (function(_super) {
     });
   };
 
+  PhonegapMainView.prototype.startWork = function() {
+    var Terminal;
+    Terminal = this.workTerminal.panels[0].panesByName.Terminal;
+    return Terminal.terminal.runCommand("cd ~/PhoneGap;");
+  };
+
+  PhonegapMainView.prototype.startDemo = function() {
+    var Terminal;
+    Terminal = this.workTerminal.panels[0].panesByName.Terminal;
+    return Terminal.terminal.runCommand("ccd ~/PhoneGap/hello; phonegap serve;");
+  };
+
   PhonegapMainView.prototype.checkState = function() {
     var vmc,
       _this = this;
@@ -407,7 +451,12 @@ PhonegapMainView = (function(_super) {
         return this.installButton.hideLoader();
       case 'ready':
         this.installContainer.hide();
-        return this.workContainer.show();
+        this.workContainer.show();
+        return this.startWork();
+      case 'demo':
+        this.installContainer.hide();
+        this.workContainer.show();
+        return this.startDemo();
     }
   };
 
@@ -420,26 +469,26 @@ PhonegapMainView = (function(_super) {
     var session, tmpOutPath, vmc,
       _this = this;
     this.watcher.on('UpdateProgress', function(percentage, status) {
-      _this.progress.updateBar(percentage, '%', status);
+      _this.installProgress.updateBar(percentage, '%', status);
       if (percentage === "100") {
         _this.installButton.hideLoader();
         _this.installTerminal.unsetClass('in');
         _this.installToggle.setState('Show details');
         _this.installToggle.unsetClass('toggle');
-        return _this.switchState('ready');
+        return _this.switchState('demo');
       } else if (percentage === "80") {
-        _this.installTerminal.setClass('in');
-        _this.installToggle.setState('Hide details');
-        return _this.installToggle.setClass('toggle');
+        _this.installTerminal.unsetClass('in');
+        _this.installToggle.setState('Show details');
+        return _this.installToggle.unsetClass('toggle');
       } else if (percentage === "40") {
         _this.installTerminal.setClass('in');
         _this.installTerminal.webterm.setKeyView();
-        _this.installToggle.setState('Show details');
-        return _this.installToggle.setClass('toggle');
-      } else if (percentage === "0") {
-        _this.installTerminal.setClass('in');
         _this.installToggle.setState('Hide details');
         return _this.installToggle.setClass('toggle');
+      } else if (percentage === "0") {
+        _this.installTerminal.unsetClass('in');
+        _this.installToggle.setState('Show details');
+        return _this.installToggle.unsetClass('toggle');
       }
     });
     session = (Math.random() + 1).toString(36).substring(7);

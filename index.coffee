@@ -5,6 +5,13 @@ class LogWatcher extends FSWatcher
     [percentage, status] = name.split '-'
     
     @emit "UpdateProgress", percentage, status
+    
+class TerminalView extends KDView
+
+  constructor: (options = {}, data) ->
+    super options, data     
+    
+    @addSubView @terminal = new TerminalPane
 
 class FinderView extends KDView
 
@@ -166,18 +173,18 @@ class PhonegapMainView extends KDView
       #Work Container
       @addSubView @workContainer = new KDCustomHTMLView
         tagName    : "div"
-        cssClass   : "work-container hidden"
+        cssClass   : "work-container"
       
       @workContainer.addSubView new KDCustomHTMLView
         tagName    : "iframe"
-        cssClass   : "iframe"
+        cssClass   : "iframe-view"
         attributes :
           src      : ""        
      
       @workContainer.addSubView @workEditor = new Workspace
         title      : "Text Editor"
         name       : "TextEditor"
-        cssClass   : "textEditor"
+        cssClass   : "editor-view"
         panels     : [
           title               : "Text Editor"
           layout              :
@@ -197,11 +204,25 @@ class PhonegapMainView extends KDView
               }                 
             ]
         ] 
-      
-      @workContainer.addSubView @workTerminal = new TerminalPane
+        
+      @workContainer.addSubView @workTerminal = new Workspace
         title      : "Terminal"
         name       : "Terminal"
-        cssClass   : 'terminalView'
+        cssClass   : "terminal-view"
+        panels     : [
+          title               : "Terminal"
+          layout              :
+            direction         : "vertical"
+            sizes             : ["100%", null]
+            splitName         : "BaseSplit"
+            views             : [
+              {
+                type          : "custom"
+                name          : "Terminal"
+                paneClass    : TerminalView
+              }                 
+            ]
+        ]
 
       @workEditor.once "viewAppended", =>
         @emit 'ready'
@@ -275,6 +296,14 @@ class PhonegapMainView extends KDView
       @watcher = new LogWatcher
       @checkState()
   
+  startWork:->
+    {Terminal} = @workTerminal.panels[0].panesByName
+    Terminal.terminal.runCommand "cd ~/PhoneGap;";
+  
+  startDemo:->
+    {Terminal} = @workTerminal.panels[0].panesByName
+    Terminal.terminal.runCommand "cd ~/PhoneGap/hello; phonegap serve;";
+  
   checkState:->
     vmc = KD.getSingleton 'vmController'
     @installButton.showLoader()
@@ -295,11 +324,15 @@ class PhonegapMainView extends KDView
       when 'install'
         @installContainer.show()
         @workContainer.hide()
-
         @installButton.hideLoader()
       when 'ready'
         @installContainer.hide()
         @workContainer.show()
+        @startWork()
+      when 'demo'
+        @installContainer.hide()
+        @workContainer.show()
+        @startDemo()
    
     
   stopCallback:->
@@ -308,29 +341,30 @@ class PhonegapMainView extends KDView
 
   installCallback:->
     @watcher.on 'UpdateProgress', (percentage, status)=>
-      @progress.updateBar percentage, '%', status
+      @installProgress.updateBar percentage, '%', status
+      
       if percentage is "100"
         @installButton.hideLoader()
         @installTerminal.unsetClass 'in'
         @installToggle.setState 'Show details'
         @installToggle.unsetClass 'toggle'
-        @switchState 'ready'
+        @switchState 'demo'
       
       else if percentage is "80"
-        @installTerminal.setClass 'in'
-        @installToggle.setState 'Hide details'
-        @installToggle.setClass 'toggle'
+        @installTerminal.unsetClass 'in'
+        @installToggle.setState 'Show details'
+        @installToggle.unsetClass 'toggle'
         
       else if percentage is "40"
         @installTerminal.setClass 'in'
         @installTerminal.webterm.setKeyView()
-        @installToggle.setState 'Show details'
+        @installToggle.setState 'Hide details'
         @installToggle.setClass 'toggle'
       
       else if percentage is "0"
-        @installTerminal.setClass 'in'
-        @installToggle.setState 'Hide details'
-        @installToggle.setClass 'toggle'
+        @installTerminal.unsetClass 'in'
+        @installToggle.setState 'Show details'
+        @installToggle.unsetClass 'toggle'
 
     session = (Math.random() + 1).toString(36).substring 7
     tmpOutPath = "#{outPath}/#{session}"
