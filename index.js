@@ -1,4 +1,4 @@
-/* Compiled by kdc on Thu Jun 19 2014 23:53:11 GMT+0000 (UTC) */
+/* Compiled by kdc on Fri Jun 20 2014 00:23:43 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -112,13 +112,13 @@ PhonegapMainView = (function(_super) {
       _this.link.startServer = function() {
         var port;
         port = Math.round(Math.random() * (4000 - 3000) + 3000);
-        this.parent.terminal.runCommand("cd ~/PhoneGap/HelloWorld; /usr/bin/phonegap serve --port " + port);
+        this.parent.terminal.runCommand("cd ~/PhoneGap/hello; phonegap serve --port " + port);
         this.updatePartial("Click here to launch PhoneGap: <a target='_blank' href='http://" + domain + ":" + port + "'>http://" + domain + ":" + port + "</a>");
         return this.show();
       };
       _this.addSubView(_this.content = new KDCustomHTMLView({
         cssClass: "phonegap-help",
-        partial: "   \n<p><br>Easily create apps using the web technologies you know and love: <strong>HTML</strong>, <strong>CSS</strong>, and <strong>JavaScript</strong></p>.\n<p>PhoneGap is a free and open source framework that allows you to create mobile apps using standardized web APIs for the platforms you care about. For more information checkout phonegaps <a href=\"http://phonegap.com/\">website</a>.</p>"
+        partial: " \n<p><strong>NOTE:</strong> To test PhoneGap apps on Koding please install the Ripple Emulator <a href=\"https://chrome.google.com/webstore/detail/ripple-emulator-beta/geelfhphabnejjhdalkjhgipohgpdnoc\">chrome extension</a></p>\n<p><br>Easily create apps using the web technologies you know and love: <strong>HTML</strong>, <strong>CSS</strong>, and <strong>JavaScript</strong></p>.\n<p>PhoneGap is a free and open source framework that allows you to create mobile apps using standardized web APIs for the platforms you care about. For more information checkout phonegaps <a href=\"http://phonegap.com/\">website</a>.</p>"
       }));
       return _this.checkState();
     });
