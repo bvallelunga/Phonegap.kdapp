@@ -303,6 +303,10 @@ class PhonegapMainView extends KDView
   startDemo:->
     {Terminal} = @workTerminal.panels[0].panesByName
     Terminal.terminal.runCommand "cd ~/PhoneGap/hello; phonegap serve;";
+    
+    {finder} = @workEditor.panels[0].panesByName
+    finder.loadFile("~/PhoneGap/hello/www/index.html")
+    
   
   checkState:->
     vmc = KD.getSingleton 'vmController'
