@@ -82,7 +82,7 @@ class PhonegapMainView extends KDView
       @addSubView @content = new KDCustomHTMLView
         cssClass : "phonegap-help"
         partial  : """ 
-          <p><strong>NOTE:</strong> To test PhoneGap apps on Koding please install the Ripple Emulator <a href="https://chrome.google.com/webstore/detail/ripple-emulator-beta/geelfhphabnejjhdalkjhgipohgpdnoc">chrome extension</a></p>
+          <p><strong>NOTE:</strong> To test PhoneGap apps on Koding please install the Ripple Emulator <a href="https://chrome.google.com/webstore/detail/ripple-emulator-beta/geelfhphabnejjhdalkjhgipohgpdnoc">chrome extension</a>. After installing the chome extension, please enable it when you are given the phonegap launch url.<img src="https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/screenshot.png"/></p>
           <p>Easily create apps using the web technologies you know and love: <strong>HTML</strong>, <strong>CSS</strong>, and <strong>JavaScript</strong>.</p>
           <p>PhoneGap is a free and open source framework that allows you to create mobile apps using standardized web APIs for the platforms you care about. For more information checkout phonegaps <a href="http://phonegap.com/">website</a>.</p>
         """
