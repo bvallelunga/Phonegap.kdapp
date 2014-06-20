@@ -12,7 +12,6 @@ class PhonegapMainView extends KDView
   user            = KD.nick()
   domain          = "#{user}.kd.io"
   outPath         = "/tmp/_PhoneGapinstaller.out"
-  phoneGapBin     = "/usr/bin/phonegap"
   installerScript = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/installer.sh"
   png             = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/phonegap.png"
 
@@ -75,7 +74,7 @@ class PhonegapMainView extends KDView
         
       @link.startServer = ()->
         port = Math.round  Math.random() * (4000 - 3000) + 3000
-        @parent.terminal.runCommand "cd ~/PhoneGap/HelloWorld; /usr/bin/phonegap serve --port #{port}"
+        @parent.terminal.runCommand "cd ~/PhoneGap/hello; phonegap serve --port #{port}"
         @updatePartial "Click here to launch PhoneGap: <a target='_blank' href='http://#{domain}:#{port}'>http://#{domain}:#{port}</a>"
         @show()
 
