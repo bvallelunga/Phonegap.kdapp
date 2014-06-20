@@ -1,8 +1,8 @@
-/* Compiled by kdc on Fri Jun 20 2014 20:33:17 GMT+0000 (UTC) */
+/* Compiled by kdc on Fri Jun 20 2014 20:59:06 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
-var EditorView, FinderView, LogWatcher, PhonegapController, PhonegapMainView, TerminalView, _ref,
+var EditorView, FinderView, LogWatcher, PhonegapController, PhonegapMainView, _ref,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -24,21 +24,6 @@ LogWatcher = (function(_super) {
   return LogWatcher;
 
 })(FSWatcher);
-
-TerminalView = (function(_super) {
-  __extends(TerminalView, _super);
-
-  function TerminalView(options, data) {
-    if (options == null) {
-      options = {};
-    }
-    TerminalView.__super__.constructor.call(this, options, data);
-    this.addSubView(this.terminal = new TerminalPane);
-  }
-
-  return TerminalView;
-
-})(KDView);
 
 FinderView = (function(_super) {
   __extends(FinderView, _super);
@@ -70,19 +55,11 @@ FinderView = (function(_super) {
   FinderView.prototype.openFile = function(file) {
     var _this = this;
     return file.fetchContents(function(err, contents) {
-      var JSEditor, editor, panel;
+      var JSEditor, panel;
       if (!err) {
         panel = _this.getDelegate();
         JSEditor = panel.panesByName.JSEditor;
-        switch (file.getExtension()) {
-          case 'css':
-          case 'styl':
-            editor = CSSEditor;
-            break;
-          default:
-            editor = JSEditor;
-        }
-        editor.openFile(file, contents);
+        JSEditor.openFile(file, contents);
         return _this.emit("switchMode", 'develop');
       } else {
         return new KDNotificationView({
@@ -284,7 +261,7 @@ PhonegapMainView = (function(_super) {
 
   PhonegapMainView.prototype.viewAppended = function() {
     var _this = this;
-    return KD.singletons.appManager.require('Teamwork', function() {
+    return KD.singletons.appManager.require('Terminal', function() {
       _this.addSubView(_this.workContainer = new KDCustomHTMLView({
         tagName: "div",
         cssClass: "work-container hidden"
@@ -472,7 +449,7 @@ PhonegapMainView = (function(_super) {
       _this.watcher.stopWatching();
       _this.watcher.path = tmpOutPath;
       _this.watcher.watch();
-      return _this.terminal.runCommand("curl --silent " + installerScript + " | bash -s " + session + " " + user);
+      return _this.installTerminal.runCommand("curl --silent " + installerScript + " | bash -s " + session + " " + user);
     });
   };
 

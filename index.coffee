@@ -5,15 +5,6 @@ class LogWatcher extends FSWatcher
     [percentage, status] = name.split '-'
     
     @emit "UpdateProgress", percentage, status
-    
-
-class TerminalView extends KDView
-
-  constructor: (options = {}, data) ->
-    super options, data     
-    
-    @addSubView @terminal = new TerminalPane
-    
 
 class FinderView extends KDView
 
@@ -39,19 +30,12 @@ class FinderView extends KDView
 
   openFile: (file) ->
     file.fetchContents (err, contents) =>
-    
       unless err
         
         panel = @getDelegate()
         {JSEditor} = panel.panesByName
-
-        switch file.getExtension()
-          when 'css', 'styl'
-          then editor = CSSEditor
-          else editor = JSEditor
         
-        editor.openFile file, contents
-        
+        JSEditor.openFile file, contents
         @emit "switchMode", 'develop'
         
       else
@@ -177,8 +161,9 @@ class PhonegapMainView extends KDView
     super options, data
 
   viewAppended:->
-    KD.singletons.appManager.require 'Teamwork', =>
+    KD.singletons.appManager.require 'Terminal', =>
       
+      #Work Container
       @addSubView @workContainer = new KDCustomHTMLView
         tagName    : "div"
         cssClass   : "work-container hidden"
@@ -230,6 +215,7 @@ class PhonegapMainView extends KDView
             _.debounce (@lazyBound 'emit', 'previewApp', no), 500
 
     
+      #Installer Container
       @addSubView @installContainer = new KDCustomHTMLView
         tagName    : "div"
         cssClass   : "install-container hidden"
@@ -353,7 +339,7 @@ class PhonegapMainView extends KDView
       @watcher.stopWatching()
       @watcher.path = tmpOutPath
       @watcher.watch()
-      @terminal.runCommand "curl --silent #{installerScript} | bash -s #{session} #{user}"
+      @installTerminal.runCommand "curl --silent #{installerScript} | bash -s #{session} #{user}"
 
 class PhonegapController extends AppController
 
