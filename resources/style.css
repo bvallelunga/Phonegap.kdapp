@@ -1,23 +1,26 @@
 
 .phonegap.main-view {
+  position: relative;
+}
+
+.phonegap .install-container {
+  position: relative;
   padding: 0 10px 10px;
   width: 600px;
   height: auto;
   background-color: rgba(255,255,255,0.9);
   border-radius: 3px;
-  left:50%;
-  margin-left:-300px;
-  margin-top:80px;
+  margin: 0 auto;
 }
 
-.phonegap .toggle-button {
+.phonegap .install-container .toggle-button {
   position: absolute;
   top: 126px;
   right: 12px;
   z-index: 4;
 }
 
-.phonegap .logo {
+.phonegap .install-container .logo {
   width:200px;
   left:50%;
   position:relative;
@@ -25,7 +28,7 @@
   margin-top:10px;
 }
 
-.phonegap .terminal {
+.phonegap .install-container .terminal {
   background:#333;
   height:0;
   max-height:400px;
@@ -36,11 +39,11 @@
   transition: height .3s ease-in;
 }
 
-.phonegap .terminal.in {
+.phonegap .install-container .terminal.in {
   height:400px;
 }
 
-.phonegap .main-button {
+.phonegap .install-container .main-button {
   margin:15px;
   left:50%;
   width:250px;
@@ -48,23 +51,23 @@
   margin-left:-125px;
 }
 
-.phonegap .main-button.loading > .button-title {
+.phonegap .install-container .main-button.loading > .button-title {
   visibility: hidden;
 }
 
-.phonegap .progressbar-container {
+.phonegap .install-container .progressbar-container {
   margin:10px 0 0 0;
   height:30px;
   border:none;
   border-radius:none;
 }
 
-.phonegap .progressbar-container .bar {
+.phonegap .install-container .progressbar-container .bar {
   background:#1AAF5D;
   border-radius:0;
 }
 
-.phonegap .progressbar-container > .dark-label
+.phonegap .install-container .progressbar-container > .dark-label
 {
   font-size:14px;
   top:8px;
@@ -72,51 +75,81 @@
   text-align:left;
 }
 
-.phonegap .phonegap-help {
+.phonegap .install-container .phonegap-help {
   margin-top: -5px;
   font-size: 14px;
   line-height: 1.7;
   color:#555;
 }
 
-.phonegap .phonegap-help p {
+.phonegap .install-container .phonegap-help p {
   padding: 5px 0;
 }
 
-.phonegap .phonegap-help img {
+.phonegap .install-container .phonegap-help img {
   width: 100%;
 }
 
-.phonegap .phonegap-help a {
+.phonegap .install-container .phonegap-help a {
   text-decoration: none;
   color: #00CC00;
 }
 
-.phonegap .phonegap-help strong {
+.phonegap .install-container .phonegap-help strong {
   text-decoration: none;
   font-weight: bold;
 }
 
-.phonegap .bar > .light-label
+.phonegap .install-container .bar > .light-label
 {
   font-size:14px;
   top:8px;
   left:8px;
   text-align:left;
   text-decoration:none;
+  width: 100% !important;
 }
 
-.phonegap .running-link {
-  text-align: center;
-  padding: 15px 0;
-  border-bottom: 1px solid #ddd;
-  border-top: 1px solid #ddd;
-  background: #eee;
-  margin-bottom: 15px;
+.phonegap .work-container {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #1B2224;
 }
 
-.phonegap .running-link a {
-  text-decoration:none;
-  color: #1AAF5D;
-  text-shadow:none;
+.phonegap .work-container .iframe {
+  position: absolute;
+  right: 0;
+  top: 55px;
+  height: calc(100% - 55px);
+  width :50%
+}
+
+.phonegap .work-container .textEditor {
+  position: absolute;
+  left:0;
+  top:55px;
+  width:50%;
+  height: calc(50% + 50px);
+}
+
+.phonegap .work-container .terminalView {
+  background:#333;
+  top: calc(50% + 77px); 
+  height: calc(50% - 79px);  
+  left: 0;
+  width:50%;
+}
+
+.phonegap .work-container .inner-header {
+  background: #282F31 !important;
+  border-bottom: 1px solid #185334 !important;
+}
+.phonegap .work-container .inner-header .title {
+  display: inline-block;
+  float: left;
+  padding: 11px;
+  font-weight: 300;
+  color: #fff;
 }
