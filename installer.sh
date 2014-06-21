@@ -11,6 +11,14 @@ echo
 echo
 echo
 
+#Install Node
+if [ ! -d "/usr/bin/node" ]; then
+  touch $OUT/"40-Asking for sudo password"
+  sudo apt-add-repository -y ppa:chris-lea/node.js
+  sudo apt-get update
+  sudo apt-get install -y nodejs
+fi
+
 #Install Phonegap
 touch $OUT/"40-Asking for sudo password"
 sudo npm install -g phonegap
