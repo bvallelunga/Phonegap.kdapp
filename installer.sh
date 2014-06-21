@@ -2,15 +2,6 @@
 OUT="/tmp/_PhoneGapinstaller.out/$1"
 mkdir -p $OUT
 
-echo
-echo
-echo
-echo
-echo
-echo
-echo
-echo
-
 #Install Node
 if [ ! -d "/usr/bin/node" ]; then
   touch $OUT/"40-Asking for sudo password"
