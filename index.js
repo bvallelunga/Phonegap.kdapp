@@ -1,4 +1,4 @@
-/* Compiled by kdc on Sat Jun 21 2014 00:27:11 GMT+0000 (UTC) */
+/* Compiled by kdc on Sat Jun 21 2014 00:39:13 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -48,7 +48,9 @@ PreviewView = (function(_super) {
       options = {};
     }
     PreviewView.__super__.constructor.call(this, options, data);
-    this.addSubView(this.browser = new PreviewPane);
+    this.addSubView(this.preview = new PreviewPane({
+      url: "https://" + (KD.nick()) + ".kd.io:3000"
+    }));
   }
 
   return PreviewView;
