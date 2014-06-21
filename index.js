@@ -1,8 +1,8 @@
-/* Compiled by kdc on Fri Jun 20 2014 22:59:46 GMT+0000 (UTC) */
+/* Compiled by kdc on Sat Jun 21 2014 00:27:11 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
-var EditorView, FinderView, LogWatcher, PhonegapController, PhonegapMainView, TerminalView, _ref,
+var EditorView, FinderView, LogWatcher, PhonegapController, PhonegapMainView, PreviewView, TerminalView, _ref,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -37,6 +37,21 @@ TerminalView = (function(_super) {
   }
 
   return TerminalView;
+
+})(KDView);
+
+PreviewView = (function(_super) {
+  __extends(PreviewView, _super);
+
+  function PreviewView(options, data) {
+    if (options == null) {
+      options = {};
+    }
+    PreviewView.__super__.constructor.call(this, options, data);
+    this.addSubView(this.browser = new PreviewPane);
+  }
+
+  return PreviewView;
 
 })(KDView);
 
@@ -276,17 +291,32 @@ PhonegapMainView = (function(_super) {
 
   PhonegapMainView.prototype.viewAppended = function() {
     var _this = this;
-    return KD.singletons.appManager.require('Terminal', function() {
+    return KD.singletons.appManager.require('Teamwork', function() {
       _this.addSubView(_this.workContainer = new KDCustomHTMLView({
         tagName: "div",
         cssClass: "work-container"
       }));
-      _this.workContainer.addSubView(new KDCustomHTMLView({
-        tagName: "iframe",
-        cssClass: "iframe-view",
-        attributes: {
-          src: ""
-        }
+      _this.workContainer.addSubView(_this.workPreview = new Workspace({
+        title: "Browser",
+        name: "Browser",
+        cssClass: "preview-view",
+        panels: [
+          {
+            title: "Browser",
+            layout: {
+              direction: "vertical",
+              sizes: ["100%", null],
+              splitName: "BaseSplit",
+              views: [
+                {
+                  type: "custom",
+                  name: "Terminal",
+                  paneClass: PreviewView
+                }
+              ]
+            }
+          }
+        ]
       }));
       _this.workContainer.addSubView(_this.workEditor = new Workspace({
         title: "Text Editor",
@@ -416,9 +446,11 @@ PhonegapMainView = (function(_super) {
   };
 
   PhonegapMainView.prototype.startDemo = function() {
-    var Terminal;
+    var Terminal, finder;
     Terminal = this.workTerminal.panels[0].panesByName.Terminal;
-    return Terminal.terminal.runCommand("ccd ~/PhoneGap/hello; phonegap serve;");
+    Terminal.terminal.runCommand("cd ~/PhoneGap/hello; phonegap serve;");
+    finder = this.workEditor.panels[0].panesByName.finder;
+    return finder.loadFile("~/PhoneGap/hello/www/index.html");
   };
 
   PhonegapMainView.prototype.checkState = function() {

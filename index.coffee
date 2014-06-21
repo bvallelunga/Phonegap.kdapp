@@ -12,6 +12,15 @@ class TerminalView extends KDView
     super options, data     
     
     @addSubView @terminal = new TerminalPane
+    
+class PreviewView extends KDView
+
+  constructor: (options = {}, data) ->
+    super options, data     
+    
+    @addSubView @preview = new PreviewPane
+      url: "https://#{KD.nick()}.kd.io:3000"
+    
 
 class FinderView extends KDView
 
@@ -168,18 +177,31 @@ class PhonegapMainView extends KDView
     super options, data
 
   viewAppended:->
-    KD.singletons.appManager.require 'Terminal', =>
+    KD.singletons.appManager.require 'Teamwork', =>
       
       #Work Container
       @addSubView @workContainer = new KDCustomHTMLView
         tagName    : "div"
         cssClass   : "work-container"
       
-      @workContainer.addSubView new KDCustomHTMLView
-        tagName    : "iframe"
-        cssClass   : "iframe-view"
-        attributes :
-          src      : ""        
+      @workContainer.addSubView @workPreview = new Workspace
+        title      : "Browser"
+        name       : "Browser"
+        cssClass   : "preview-view"
+        panels     : [
+          title               : "Browser"
+          layout              :
+            direction         : "vertical"
+            sizes             : ["100%", null]
+            splitName         : "BaseSplit"
+            views             : [
+              {
+                type          : "custom"
+                name          : "Terminal"
+                paneClass    : PreviewView
+              }                 
+            ]
+        ]
      
       @workContainer.addSubView @workEditor = new Workspace
         title      : "Text Editor"
@@ -223,6 +245,7 @@ class PhonegapMainView extends KDView
               }                 
             ]
         ]
+  
 
       @workEditor.once "viewAppended", =>
         @emit 'ready'

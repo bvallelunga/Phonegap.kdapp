@@ -5,7 +5,7 @@
 
 .phonegap .install-container {
   position: relative;
-  padding: 0 10px 10px;
+  padding: 20px 10px 0 10px;
   width: 600px;
   height: auto;
   background-color: rgba(255,255,255,0.9);
@@ -15,7 +15,7 @@
 
 .phonegap .install-container .toggle-button {
   position: absolute;
-  top: 126px;
+  top: 146px;
   right: 12px;
   z-index: 4;
 }
@@ -118,12 +118,12 @@
   background: #1B2224;
 }
 
-.phonegap .work-container .iframe-view {
+.phonegap .work-container .preview-view {
   position: absolute;
   right: 0;
-  top: 55px;
+  top:55px;
   height: calc(100% - 55px);
-  width :40%
+  width: 40%;
 }
 
 .phonegap .work-container .editor-view {
