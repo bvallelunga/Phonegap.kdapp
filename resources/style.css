@@ -90,11 +90,6 @@
   width: 100%;
 }
 
-.phonegap .install-container .phonegap-help a {
-  text-decoration: none;
-  color: #00CC00;
-}
-
 .phonegap .install-container .phonegap-help strong {
   text-decoration: none;
   font-weight: bold;
@@ -115,7 +110,7 @@
   padding: 0;
   width: 100%;
   height: 100%;
-  background: #1B2224;
+  background: #ededed;
 }
 
 .phonegap .work-container .download-view {
@@ -124,6 +119,62 @@
   top:55px;
   height: calc(100% - 55px);
   width: 40%;
+  color: #333;
+  font-size: 16px;
+  line-height: 18px;
+  overflow: auto;
+}
+
+.phonegap .work-container .logo {
+  width: 30%;
+  margin: 30px auto 0 auto;
+  display:block;
+}
+
+.phonegap .work-container .helper {
+  padding: 30px 20px;
+}
+
+.phonegap .work-container .helper p {
+  padding: 10px 0;
+}
+
+.phonegap .work-container .helper a {
+  text-decoration: none;
+  color: #185334;
+}
+
+.phonegap .work-container .helper a:hover {
+  text-decoration: underline;
+}
+
+.phonegap .work-container .helper .links a {
+  line-height: 25px;
+}
+
+.phonegap .work-container .helper strong {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.phonegap .work-container .helper ul {
+  list-style-type: disc;
+}
+
+.phonegap .work-container .helper ul li {
+  margin: 0 0 10px 30px;
+}
+
+.phonegap .work-container .helper .code {
+  margin: 10px 0;
+  padding: 10px;
+  color: #ededed;
+  background: #1B2224;
+  font-size: 12px;
+  
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 
 .phonegap .work-container .editor-view {
@@ -136,11 +187,12 @@
 
 .phonegap .work-container .terminal-view {
   position: absolute;
-  background:#333;
-  top: calc(50% + 127px); 
-  height: calc(50% - 129px);  
+  background: #333;
+  top: calc(50% + 125px);
+  height: calc(50% - 125px);
   left: 0;
-  width:60%;
+  width: 60%;
+  border-top: solid 2px #1B2224;
 }
 
 .phonegap .work-container .inner-header {

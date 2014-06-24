@@ -1,8 +1,8 @@
-/* Compiled by kdc on Sun Jun 22 2014 07:17:15 GMT+0000 (UTC) */
+/* Compiled by kdc on Tue Jun 24 2014 19:51:27 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
-var EditorView, FinderView, LogWatcher, PhonegapController, PhonegapMainView, PreviewView, TerminalView, _ref,
+var EditorView, FinderView, LogWatcher, PhonegapController, PhonegapMainView, TerminalView, _ref,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -37,23 +37,6 @@ TerminalView = (function(_super) {
   }
 
   return TerminalView;
-
-})(KDView);
-
-PreviewView = (function(_super) {
-  __extends(PreviewView, _super);
-
-  function PreviewView(options, data) {
-    if (options == null) {
-      options = {};
-    }
-    PreviewView.__super__.constructor.call(this, options, data);
-    this.addSubView(this.preview = new PreviewPane({
-      url: "https://" + (KD.nick()) + ".kd.io:3000"
-    }));
-  }
-
-  return PreviewView;
 
 })(KDView);
 
@@ -267,7 +250,7 @@ EditorView = (function(_super) {
 })(KDView);
 
 PhonegapMainView = (function(_super) {
-  var domain, installerScript, outPath, phoneGapBin, png, user;
+  var androidApp, appLogo, domain, installerScript, iosApp, outPath, phoneGapBin, phonegapApis, phonegapLogo, user;
 
   __extends(PhonegapMainView, _super);
 
@@ -281,7 +264,15 @@ PhonegapMainView = (function(_super) {
 
   installerScript = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/installer.sh";
 
-  png = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/phonegap.png";
+  phonegapLogo = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/phonegap.png";
+
+  appLogo = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/app.png";
+
+  iosApp = "https://itunes.apple.com/app/id843536693";
+
+  androidApp = "https://play.google.com/store/apps/details?id=com.adobe.phonegap.app";
+
+  phonegapApis = "http://phonegap.com/about/feature/";
 
   function PhonegapMainView(options, data) {
     if (options == null) {
@@ -298,27 +289,21 @@ PhonegapMainView = (function(_super) {
         tagName: "div",
         cssClass: "work-container"
       }));
-      _this.workContainer.addSubView(_this.workPreview = new Workspace({
-        title: "Browser",
-        name: "Browser",
-        cssClass: "preview-view",
-        panels: [
-          {
-            title: "Browser",
-            layout: {
-              direction: "vertical",
-              sizes: ["100%", null],
-              splitName: "BaseSplit",
-              views: [
-                {
-                  type: "custom",
-                  name: "Terminal",
-                  paneClass: PreviewView
-                }
-              ]
-            }
-          }
-        ]
+      _this.workContainer.addSubView(_this.workDownload = new KDCustomHTMLView({
+        tagName: "div",
+        cssClass: "download-view"
+      }));
+      _this.workDownload.addSubView(new KDCustomHTMLView({
+        tagName: 'img',
+        cssClass: 'logo',
+        attributes: {
+          src: appLogo
+        }
+      }));
+      _this.workDownload.addSubView(new KDCustomHTMLView({
+        tagName: "div",
+        cssClass: "helper",
+        partial: " \n<p>The PhoneGap Developer app aims to lower the barrier of entry to creating PhoneGap applications. You can now immediately preview your app on a device without installing platform SDKs, registering devices, or even compiling code. You have full access to the <a href=\"" + phonegapApis + "\">official PhoneGap APIs</a>. You can even develop an iOS app on Windows - and soon - a Windows Phone app on OS X. Whether you’re a novice or expert, we think the PhoneGap Developer app will become part of your personal toolkit!</p>\n<p>\n  <strong>1. Install the PhoneGap Developer App</strong><br>\n  Now grab the mobile app, which is globally available in an app store near you:\n  <br><br>\n  <div class=\"links\">\n    <a href=\"" + iosApp + "\">iOS from the App Store</a>\n    <br>\n    <a href=\"" + androidApp + "\">Android from Google Play</a>\n  </div>\n</p>\n<p>\n  <strong>2. Create an App</strong><br>\n  The PhoneGap Developer app is compatible with existing PhoneGap and Apache Cordova projects.\n  <br><br>\n  You can create a new app:\n  <div class=\"code\">\n    $ phonegap create my-app\n    <br>\n    $ cd my-app/\n  </div>\n  <br>\n  Or open an existing app:\n  <div class=\"code\">\n    $ cd ~/PhoneGap/my-existing-app\n  </div>\n</p>\n<p>\n  <strong>3. Pair the CLI and Developer App</strong><br>\n  This is where the magic happens. The CLI starts a tiny web server to serve your project. Then, the PhoneGap Developer App connects to that server.\n  <br><br>\n  First, use the CLI to serve your project:\n  <div class=\"code\">\n    $ phonegap serve\n    <br>\n    [phonegap] starting app server...\n    <br>\n    [phonegap] listening on " + user + ".kd.io:3000\n    <br>\n    [phonegap]\n    <br>\n    [phonegap] ctrl-c to stop the server\n    <br>\n    [phonegap]\n  </div>\n  <br>\n  Second, enter the server address into the PhoneGap Developer App. In this example, the address is <strong>" + user + ".kd.io:3000</strong>\n</p>\n<p>\n  <strong>4. Get to Work</strong><br>\n  Once paired, it’s business as usual. You can freely add, edit, and remove files from your project. Every saved change will automatically update the preview displayed in the PhoneGap Developer App.\n  <br><br>\n  You can also use hidden touch gestures for additional control:\n  <br>\n  <ul>\n    <li>3-finger tap will go to the home page</li>\n    <li>4-finger tap will force the app to update</li>\n  <ul>\n</p>"
       }));
       _this.workContainer.addSubView(_this.workEditor = new Workspace({
         title: "Text Editor",
@@ -411,7 +396,7 @@ PhonegapMainView = (function(_super) {
         tagName: 'img',
         cssClass: 'logo',
         attributes: {
-          src: png
+          src: phonegapLogo
         }
       }));
       _this.installContainer.addSubView(_this.installProgress = new KDProgressBarView({
@@ -434,7 +419,7 @@ PhonegapMainView = (function(_super) {
       }));
       _this.installContainer.addSubView(new KDCustomHTMLView({
         cssClass: "phonegap-help",
-        partial: " \n<p><strong>NOTE:</strong> To test PhoneGap apps on Koding please install the Ripple Emulator <a href=\"https://chrome.google.com/webstore/detail/ripple-emulator-beta/geelfhphabnejjhdalkjhgipohgpdnoc\">chrome extension</a>. After installing the chome extension, please enable it when you are given the phonegap launch url.<img src=\"https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/screenshot.png\"/></p>\n<p>Easily create apps using the web technologies you know and love: <strong>HTML</strong>, <strong>CSS</strong>, and <strong>JavaScript</strong>.</p>\n<p>PhoneGap is a free and open source framework that allows you to create mobile apps using standardized web APIs for the platforms you care about. For more information checkout phonegaps <a href=\"http://phonegap.com/\">website</a>.</p>"
+        partial: "<p>Easily create apps using the web technologies you know and love: <strong>HTML</strong>, <strong>CSS</strong>, and <strong>JavaScript</strong>.</p>\n<p>PhoneGap is a free and open source framework that allows you to create mobile apps using standardized web APIs for the platforms you care about. For more information checkout phonegaps <a href=\"http://phonegap.com/\">website</a>.</p>"
       }));
       _this.watcher = new LogWatcher;
       return _this.checkState();
