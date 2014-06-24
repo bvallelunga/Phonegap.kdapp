@@ -110,7 +110,7 @@
   padding: 0;
   width: 100%;
   height: 100%;
-  background: #ededed;
+  background: #fff;
 }
 
 .phonegap .work-container .download-view {
@@ -159,7 +159,8 @@
 
 .phonegap .work-container .helper img {
   width: 80%;
-  margin: 0 auto;
+  margin: 15px auto;
+  display: block;
 }
 
 .phonegap .work-container .helper ul {
@@ -180,6 +181,13 @@
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
+}
+
+.phonegap .work-container .helper .separator {
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
 }
 
 .phonegap .work-container .editor-view {

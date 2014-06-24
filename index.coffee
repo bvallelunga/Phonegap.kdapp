@@ -160,8 +160,8 @@ class PhonegapMainView extends KDView
   domain          = "#{user}.kd.io"
   outPath         = "/tmp/_PhoneGapinstaller.out"
   phoneGapBin     = "/usr/bin/phonegap"
-  installerScript = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/installer.sh"
-  gitResources    = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources"
+  installerScript = "https://raw.githubusercontent.com/bvallelunga/Phonegap.kdapp/master/installer.sh"
+  gitResources    = "https://raw.githubusercontent.com/bvallelunga/Phonegap.kdapp/master/resources"
   iosApp          = "https://itunes.apple.com/app/id843536693"
   androidApp      = "https://play.google.com/store/apps/details?id=com.adobe.phonegap.app"
   readMore        = "http://phonegap.com/blog/2014/04/23/phonegap-developer-app/"
@@ -209,7 +209,7 @@ class PhonegapMainView extends KDView
             This is where the magic happens. The CLI starts a tiny web server to serve your project. Then, the PhoneGap Developer App connects to that server.
             <br><br>
             First, use the CLI to serve your project:
-            <img src="#{gitResources}/phonegap-paring.png"/>
+            <img src="#{gitResources}/phonegap-pairing.png"/>
             <br>
             Second, enter the server address into the PhoneGap Developer App. In this example, the address is <strong>#{user}.kd.io:3000</strong>
           </p>
@@ -218,7 +218,7 @@ class PhonegapMainView extends KDView
             Once paired, it’s business as usual. You can freely add, edit, and remove files from your project. Every saved change will automatically update the preview displayed in the PhoneGap Developer App.
             <img src="#{gitResources}/phonegap-success.gif"/>
           </p>
-          <br><br>
+          <div class="separator"></div>
           <p>
             <strong>Creating/Opening an App</strong><br>
             The PhoneGap Developer app is compatible with existing PhoneGap and Apache Cordova projects.
