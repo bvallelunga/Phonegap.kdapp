@@ -1,7 +1,7 @@
-/* Compiled by kdc on Tue Jun 24 2014 20:06:32 GMT+0000 (UTC) */
+/* Compiled by kdc on Tue Jun 24 2014 20:14:19 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
-/* BLOCK STARTS: /home/bvallelunga/Applications/PhoneGap.kdapp/index.coffee */
+/* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
 var EditorView, FinderView, LogWatcher, PhonegapController, PhonegapMainView, TerminalView, _ref,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
