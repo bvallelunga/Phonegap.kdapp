@@ -1,4 +1,4 @@
-/* Compiled by kdc on Tue Jun 24 2014 21:01:58 GMT+0000 (UTC) */
+/* Compiled by kdc on Tue Jun 24 2014 21:07:08 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
