@@ -5,7 +5,7 @@
   "title": "PhoneGap",
   "name": "PhoneGap",
   "identifier": "com.koding.apps.phonegap",
-  "path": "~/Applications/Phonegap.kdapp",
+  "path": "~/Applications/PhoneGap.kdapp",
   "homepage": "bvallelunga.kd.io/phonegap",
   "repository": "git://github.com/bvallelunga/phonegap.kdapp.git",
   "description": "Phonegap : a Koding application created with the blank template.",
