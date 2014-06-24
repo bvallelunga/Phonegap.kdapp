@@ -157,6 +157,11 @@
   font-weight: bold;
 }
 
+.phonegap .work-container .helper img {
+  width: 80%;
+  margin: 0 auto;
+}
+
 .phonegap .work-container .helper ul {
   list-style-type: disc;
 }

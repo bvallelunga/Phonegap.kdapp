@@ -24,10 +24,6 @@ if [ ! -d "~/PhoneGap/hello" ]; then
   #Create Demo Project
   touch $OUT/"80-Creating PhoneGap Project"
   /usr/bin/phonegap create ~/PhoneGap/hello com.$2.hello HelloWorld
-  
-  #Modify index.html For Ripple
-  cd ~/PhoneGap/hello/www
-  curl -O https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/index.html > index.html
 
 fi
 

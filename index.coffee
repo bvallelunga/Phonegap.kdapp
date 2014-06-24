@@ -161,11 +161,10 @@ class PhonegapMainView extends KDView
   outPath         = "/tmp/_PhoneGapinstaller.out"
   phoneGapBin     = "/usr/bin/phonegap"
   installerScript = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/installer.sh"
-  phonegapLogo    = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/phonegap.png"
-  appLogo         = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/app.png"
+  gitResources    = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources"
   iosApp          = "https://itunes.apple.com/app/id843536693"
   androidApp      = "https://play.google.com/store/apps/details?id=com.adobe.phonegap.app"
-  phonegapApis    = "http://phonegap.com/about/feature/"
+  readMore        = "http://phonegap.com/blog/2014/04/23/phonegap-developer-app/"
 
   constructor:(options = {}, data)->
     options.cssClass = 'phonegap main-view'
@@ -187,13 +186,13 @@ class PhonegapMainView extends KDView
         tagName       : 'img'
         cssClass      : 'logo'
         attributes    :
-          src         : appLogo
+          src         : "#{gitResources}/app.png"
           
       @workDownload.addSubView new KDCustomHTMLView
         tagName    : "div"
         cssClass   : "helper"
         partial  : """ 
-          <p>The PhoneGap Developer app aims to lower the barrier of entry to creating PhoneGap applications. You can now immediately preview your app on a device without installing platform SDKs, registering devices, or even compiling code. You have full access to the <a href="#{phonegapApis}">official PhoneGap APIs</a>. You can even develop an iOS app on Windows - and soon - a Windows Phone app on OS X. Whether you’re a novice or expert, we think the PhoneGap Developer app will become part of your personal toolkit!</p>
+          <p>The PhoneGap Developer app aims to lower the barrier of entry to creating PhoneGap applications. You can now immediately preview your app on a device without installing platform SDKs, registering devices, or even compiling code.<a href=“#{readMore}”>Read more…</a></p>
           <p>
             <strong>1. Install the PhoneGap Developer App</strong><br>
             Now grab the mobile app, which is globally available in an app store near you:
@@ -206,7 +205,22 @@ class PhonegapMainView extends KDView
             </div>
           </p>
           <p>
-            <strong>2. Create an App</strong><br>
+            <strong>2. Pair the CLI and Developer App</strong><br>
+            This is where the magic happens. The CLI starts a tiny web server to serve your project. Then, the PhoneGap Developer App connects to that server.
+            <br><br>
+            First, use the CLI to serve your project:
+            <img src="#{gitResources}/phonegap-paring.png"/>
+            <br>
+            Second, enter the server address into the PhoneGap Developer App. In this example, the address is <strong>#{user}.kd.io:3000</strong>
+          </p>
+          <p>
+            <strong>3. Get to Work</strong><br>
+            Once paired, it’s business as usual. You can freely add, edit, and remove files from your project. Every saved change will automatically update the preview displayed in the PhoneGap Developer App.
+            <img src="#{gitResources}/phonegap-success.gif"/>
+          </p>
+          <br><br>
+          <p>
+            <strong>Creating/Opening an App</strong><br>
             The PhoneGap Developer app is compatible with existing PhoneGap and Apache Cordova projects.
             <br><br>
             You can create a new app:
@@ -220,38 +234,6 @@ class PhonegapMainView extends KDView
             <div class="code">
               $ cd ~/PhoneGap/my-existing-app
             </div>
-          </p>
-          <p>
-            <strong>3. Pair the CLI and Developer App</strong><br>
-            This is where the magic happens. The CLI starts a tiny web server to serve your project. Then, the PhoneGap Developer App connects to that server.
-            <br><br>
-            First, use the CLI to serve your project:
-            <div class="code">
-              $ phonegap serve
-              <br>
-              [phonegap] starting app server...
-              <br>
-              [phonegap] listening on #{user}.kd.io:3000
-              <br>
-              [phonegap]
-              <br>
-              [phonegap] ctrl-c to stop the server
-              <br>
-              [phonegap]
-            </div>
-            <br>
-            Second, enter the server address into the PhoneGap Developer App. In this example, the address is <strong>#{user}.kd.io:3000</strong>
-          </p>
-          <p>
-            <strong>4. Get to Work</strong><br>
-            Once paired, it’s business as usual. You can freely add, edit, and remove files from your project. Every saved change will automatically update the preview displayed in the PhoneGap Developer App.
-            <br><br>
-            You can also use hidden touch gestures for additional control:
-            <br>
-            <ul>
-              <li>3-finger tap will go to the home page</li>
-              <li>4-finger tap will force the app to update</li>
-            <ul>
           </p>
         """
      
@@ -343,7 +325,7 @@ class PhonegapMainView extends KDView
         tagName       : 'img'
         cssClass      : 'logo'
         attributes    :
-          src         : phonegapLogo
+          src         : "#{gitResources}/phonegap.png"
 
       @installContainer.addSubView @installProgress = new KDProgressBarView
         initial       : 100
