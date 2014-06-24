@@ -12,15 +12,6 @@ class TerminalView extends KDView
     super options, data     
     
     @addSubView @terminal = new TerminalPane
-    
-class PreviewView extends KDView
-
-  constructor: (options = {}, data) ->
-    super options, data     
-    
-    @addSubView @preview = new PreviewPane
-      url: "https://#{KD.nick()}.kd.io:3000"
-    
 
 class FinderView extends KDView
 
@@ -170,7 +161,8 @@ class PhonegapMainView extends KDView
   outPath         = "/tmp/_PhoneGapinstaller.out"
   phoneGapBin     = "/usr/bin/phonegap"
   installerScript = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/installer.sh"
-  png             = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/phonegap.png"
+  phonegapLogo    = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/phonegap.png"
+  appLogo         = "https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/app.png"
 
   constructor:(options = {}, data)->
     options.cssClass = 'phonegap main-view'
@@ -184,24 +176,22 @@ class PhonegapMainView extends KDView
         tagName    : "div"
         cssClass   : "work-container"
       
-      @workContainer.addSubView @workPreview = new Workspace
-        title      : "Browser"
-        name       : "Browser"
-        cssClass   : "preview-view"
-        panels     : [
-          title               : "Browser"
-          layout              :
-            direction         : "vertical"
-            sizes             : ["100%", null]
-            splitName         : "BaseSplit"
-            views             : [
-              {
-                type          : "custom"
-                name          : "Terminal"
-                paneClass    : PreviewView
-              }                 
-            ]
-        ]
+      @workContainer.addSubView @workDownload = new KDCustomHTMLView
+        tagName    : "div"
+        cssClass   : "download-view"
+       
+      @workContainer.addSubView new KDCustomHTMLView
+        tagName       : 'img'
+        cssClass      : 'logo'
+        attributes    :
+          src         : appLogo
+          
+      @workContainer.addSubView new KDCustomHTMLView
+        tagName    : "div"
+        cssClass   : "helper"
+        partial  : """ 
+          <p>asdf</p>
+        """
      
       @workContainer.addSubView @workEditor = new Workspace
         title      : "Text Editor"
@@ -291,7 +281,7 @@ class PhonegapMainView extends KDView
         tagName       : 'img'
         cssClass      : 'logo'
         attributes    :
-          src         : png
+          src         : phonegapLogo
 
       @installContainer.addSubView @installProgress = new KDProgressBarView
         initial       : 100
