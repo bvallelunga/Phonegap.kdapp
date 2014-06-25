@@ -11,7 +11,7 @@ class TerminalView extends KDView
   constructor: (options = {}, data) ->
     super options, data     
     
-    @addSubView new TerminalPane
+    @addSubView @terminal = new TerminalPane
 
 class FinderView extends KDView
 
@@ -353,14 +353,14 @@ class PhonegapMainView extends KDView
       @checkState()
   
   startWork:->
-    {Terminal} = @workTerminal.panels[0].panesByName
+    {Terminal} = @workTerminal.activePanel.panesByName
     Terminal.terminal.runCommand "cd ~/PhoneGap;";
   
   startDemo:->
-    {Terminal} = @workTerminal.panels[0].panesByName
+    {Terminal} = @workTerminal.activePanel.panesByName
     Terminal.terminal.runCommand "cd ~/PhoneGap/hello; phonegap serve;";
     
-    {finder} = @workEditor.panels[0].panesByName
+    {finder} = @workEditor.activePanel.panesByName
     finder.loadFile("~/PhoneGap/hello/www/index.html")
     
   
