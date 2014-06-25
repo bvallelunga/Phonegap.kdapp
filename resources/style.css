@@ -1,6 +1,7 @@
 
 .phonegap.main-view {
   position: relative;
+  background: #fff;
 }
 
 .phonegap .install-container {
@@ -187,7 +188,7 @@
 .phonegap .work-container .helper .separator {
   width: 100%;
   height: 1px;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.15);
   margin: 20px 0;
 }
 

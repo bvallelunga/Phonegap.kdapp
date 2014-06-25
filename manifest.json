@@ -8,7 +8,7 @@
   "path": "~/Applications/Phonegap.kdapp",
   "homepage": "bvallelunga.kd.io/phonegap",
   "repository": "git://github.com/bvallelunga/phonegap.kdapp.git",
-  "description": "Phonegap : Install and develop PhoneGap apps on Koding!!!",
+  "description": "Phonegap: Install and develop PhoneGap apps on Koding!!!",
   "category": "web-app",
   "source": {
     "blocks": {

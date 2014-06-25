@@ -2,7 +2,7 @@ class LogWatcher extends FSWatcher
 
   fileAdded: (change)->
     {name} = change.file
-    [percentage, status] = name.split '-'
+    [percentage, status] = name.split '-' 
     
     @emit "UpdateProgress", percentage, status
     
@@ -11,7 +11,7 @@ class TerminalView extends KDView
   constructor: (options = {}, data) ->
     super options, data     
     
-    @addSubView @terminal = new TerminalPane
+    @addSubView new TerminalPane
 
 class FinderView extends KDView
 
@@ -176,7 +176,7 @@ class PhonegapMainView extends KDView
       #Work Container
       @addSubView @workContainer = new KDCustomHTMLView
         tagName    : "div"
-        cssClass   : "work-container"
+        cssClass   : "work-container hidden"
       
       @workContainer.addSubView @workDownload = new KDCustomHTMLView
         tagName    : "div"
@@ -192,7 +192,7 @@ class PhonegapMainView extends KDView
         tagName    : "div"
         cssClass   : "helper"
         partial  : """ 
-          <p>The PhoneGap Developer app aims to lower the barrier of entry to creating PhoneGap applications. You can now immediately preview your app on a device without installing platform SDKs, registering devices, or even compiling code.<a href=“#{readMore}”>Read more…</a></p>
+          <p>The PhoneGap Developer app aims to lower the barrier of entry to creating PhoneGap applications. You can now immediately preview your app on a device without installing platform SDKs, registering devices, or even compiling code.<a href=“#{readMore}”> Read more…</a></p>
           <p>
             <strong>1. Install the PhoneGap Developer App</strong><br>
             Now grab the mobile app, which is globally available in an app store near you:
@@ -259,7 +259,7 @@ class PhonegapMainView extends KDView
                 paneClass     : EditorView
               }                 
             ]
-        ] 
+        ]
         
       @workContainer.addSubView @workTerminal = new Workspace
         title      : "Terminal"
@@ -393,7 +393,15 @@ class PhonegapMainView extends KDView
         @installContainer.hide()
         @workContainer.show()
         @startDemo()
+    
+    @workSpaceFix()
    
+  workSpaceFix:->
+    # This is a temporary resize fix for KDSplitView
+    # TODO: Remove this when its fixed in KD Framework
+    wc = KD.getSingleton("windowController")
+    wc.notifyWindowResizeListeners()
+    wc.notifyWindowResizeListeners()
     
   stopCallback:->
     @_lastRequest = 'stop'
