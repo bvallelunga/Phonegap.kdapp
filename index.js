@@ -1,4 +1,4 @@
-/* Compiled by kdc on Wed Jun 25 2014 00:01:21 GMT+0000 (UTC) */
+/* Compiled by kdc on Wed Jun 25 2014 00:45:47 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -481,11 +481,10 @@ PhonegapMainView = (function(_super) {
   };
 
   PhonegapMainView.prototype.workSpaceFix = function() {
-    return setTimeout(function() {
-      var wc;
-      wc = KD.getSingleton("windowController");
-      return wc.notifyWindowResizeListeners();
-    }, 1000);
+    var wc;
+    wc = KD.getSingleton("windowController");
+    wc.notifyWindowResizeListeners();
+    return wc.notifyWindowResizeListeners();
   };
 
   PhonegapMainView.prototype.stopCallback = function() {
