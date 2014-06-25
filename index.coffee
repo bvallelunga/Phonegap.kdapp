@@ -216,7 +216,7 @@ class PhonegapMainView extends KDView
           <p>
             <strong>3. Get to Work</strong><br>
             Once paired, it’s business as usual. You can freely add, edit, and remove files from your project. Every saved change will automatically update the preview displayed in the PhoneGap Developer App.
-            <img src="#{gitResources}/phonegap-success.gif"/>
+            <img src="#{gitResources}/phonegap-success.png"/>
           </p>
           <div class="separator"></div>
           <p>
