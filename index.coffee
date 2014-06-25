@@ -1,3 +1,63 @@
+class KiteHelper extends KDController
+
+  getReady:->
+
+    new Promise (resolve, reject) =>
+
+      {JVM} = KD.remote.api
+      JVM.fetchVmsByContext (err, vms)=>
+
+        console.warn err  if err
+        return unless vms
+
+        @_vms = vms
+        @_kites = {}
+
+        kiteController = KD.getSingleton 'kiteController'
+
+        for vm in vms
+          alias = vm.hostnameAlias
+          @_kites[alias] = kiteController
+            .getKite "os-#{ vm.region }", alias, 'os'
+
+        @emit 'ready'
+        resolve()
+
+  getVm:->
+    @_vm or= @_vms.first
+    return @_vm
+
+  getKite:->
+
+    new Promise (resolve, reject)=>
+
+      @getReady().then =>
+
+        vm = @getVm().hostnameAlias
+
+        unless kite = @_kites[vm]
+          return reject
+            message: "No such kite for #{vm}"
+
+        kite.vmOn().then -> resolve kite
+
+  run:(cmd, timeout, callback)->
+
+    unless callback
+      [timeout, callback] = [callback, timeout]
+
+    # Set it to 10 min if not given
+    timeout ?= 10 * 60 * 1000
+    @getKite().then (kite)->
+      kite.options.timeout = timeout
+      kite.exec(command: cmd)
+      .then (result)->
+        callback null, result
+    .catch (err)->
+      callback
+        message : "Failed to run #{cmd}"
+        details : err
+
 class LogWatcher extends FSWatcher
 
   fileAdded: (change)->
@@ -171,214 +231,223 @@ class PhonegapMainView extends KDView
     super options, data
 
   viewAppended:->
-    KD.singletons.appManager.require 'Teamwork', =>
-      
-      #Work Container
-      @addSubView @workContainer = new KDCustomHTMLView
-        tagName    : "div"
-        cssClass   : "work-container hidden"
-      
-      @workContainer.addSubView @workDownload = new KDCustomHTMLView
-        tagName    : "div"
-        cssClass   : "download-view"
-       
-      @workDownload.addSubView new KDCustomHTMLView
-        tagName       : 'img'
-        cssClass      : 'logo'
-        attributes    :
-          src         : "#{gitResources}/app.png"
-          
-      @workDownload.addSubView new KDCustomHTMLView
-        tagName    : "div"
-        cssClass   : "helper"
-        partial  : """ 
-          <p>The PhoneGap Developer app aims to lower the barrier of entry to creating PhoneGap applications. You can now immediately preview your app on a device without installing platform SDKs, registering devices, or even compiling code.<a href=“#{readMore}”> Read more…</a></p>
-          <p>
-            <strong>1. Install the PhoneGap Developer App</strong><br>
-            Now grab the mobile app, which is globally available in an app store near you:
-            <br><br>
-            <div class="links">
-              <ul>
-                <li><a href="#{iosApp}">iOS from the App Store</a></li>
-                <li><a href="#{androidApp}">Android from Google Play</a></li>
-              </ul>
-            </div>
-          </p>
-          <p>
-            <strong>2. Pair the CLI and Developer App</strong><br>
-            This is where the magic happens. The CLI starts a tiny web server to serve your project. Then, the PhoneGap Developer App connects to that server.
-            <br><br>
-            First, use the CLI to serve your project:
-            <img src="#{gitResources}/phonegap-pairing.png"/>
-            <br>
-            Second, enter the server address into the PhoneGap Developer App. Please ignore the ip address given by phonegap serve. <strong>Only use <span class="link">#{user}.kd.io:3000</span></strong>
-          </p>
-          <p>
-            <strong>3. Get to Work</strong><br>
-            Once paired, it’s business as usual. You can freely add, edit, and remove files from your project. Every saved change will automatically update the preview displayed in the PhoneGap Developer App.
-            <img src="#{gitResources}/phonegap-success.png"/>
-          </p>
-          <div class="separator">
-            Frequently Asked Questions
-          </div>
-          <p>
-            <strong>How come I don't see my terminal or the formatting is off?</strong><br>
-            The KD framework is still in development and all the bugs will be fixed soon. 
-            <br><br>
-            To fix formatting resize your browser window. Reload the page if the terminal or editor does not appear. Sorry for the inconvenience.
-          </p>
-          <br><br>
-          <p>
-            <strong>How do I create or open a phonegap app?</strong><br>
-            The PhoneGap Developer app is compatible with existing PhoneGap and Apache Cordova projects.
-            <br><br>
-            You can create a new app:
-            <div class="code">
-              $ phonegap create my-app
-              <br>
-              $ cd my-app/
-            </div>
-            <br>
-            Or open an existing app:
-            <div class="code">
-              $ cd ~/PhoneGap/my-existing-app
-            </div>
-          </p>
-          <br><br>
-          <p>
-            <strong>How do I create a phonegap server for testing?</strong><br>
-            Starting a phonegap server enables developers to test on multiple simultaneously.
-            <br><br>
-            Serve phonegap on port <strong>3000</strong>:
-            <div class="code">
-              $ cd my-app/
-              <br>
-              $ phonegap serve
-            </div>
-            <br>
-            Or serve to a specific port
-            <div class="code">
-              $ cd my-app/
-              <br>
-              $ phonegap serve --port &lt;port&gt;
-            </div>
-          </p>
-        """
-     
-      @workContainer.addSubView @workEditor = new Workspace
-        title      : "Text Editor"
-        name       : "TextEditor"
-        cssClass   : "editor-view"
-        panels     : [
-          title               : "Text Editor"
-          layout              :
-            direction         : "vertical"
-            sizes             : ["180px", "100%"]
-            splitName         : "BaseSplit"
-            views             : [
-              {
-                type          : "custom"
-                name          : "finder"
-                paneClass     : FinderView
-              }                                       
-              {
-                type          : "custom"
-                name          : "JSEditor"
-                paneClass     : EditorView
-              }                 
-            ]
-        ]
-        
-      @workContainer.addSubView @workTerminal = new Workspace
-        title      : "Terminal"
-        name       : "Terminal"
-        cssClass   : "terminal-view"
-        panels     : [
-          title               : "Terminal"
-          layout              :
-            direction         : "vertical"
-            sizes             : ["100%"]
-            splitName         : "BaseSplit"
-            views             : [
-              {
-                type          : "custom"
-                name          : "Terminal"
-                paneClass    : TerminalView
-              }                 
-            ]
-        ]
-  
-
-      @workEditor.once "viewAppended", =>
-        @emit 'ready'
-
-        {JSEditor} = \
-          @workEditor.activePanel.panesByName
-
-        JSEditor.ace.once 'ace.ready', =>
-      
-          JSEditor.ace.editor.on "change", \
-            _.debounce (@lazyBound 'emit', 'previewApp', no), 500
-
+    @addSubView @loadingContainer = new KDCustomHTMLView
+          tagName    : "div"
+          cssClass   : "loading-container"
+          partial    : "Please wait while vm turns on..."
     
-      #Installer Container
-      @addSubView @installContainer = new KDCustomHTMLView
-        tagName    : "div"
-        cssClass   : "install-container hidden"
+    
+    @kiteHelper = new KiteHelper
+    @kiteHelper.ready =>
+      KD.singletons.appManager.require 'Teamwork', =>
+        
+        #Work Container
+        @addSubView @workContainer = new KDCustomHTMLView
+          tagName    : "div"
+          cssClass   : "work-container"
+        
+        @workContainer.addSubView @workDownload = new KDCustomHTMLView
+          tagName    : "div"
+          cssClass   : "download-view"
+         
+        @workDownload.addSubView new KDCustomHTMLView
+          tagName       : 'img'
+          cssClass      : 'logo'
+          attributes    :
+            src         : "#{gitResources}/app.png"
+            
+        @workDownload.addSubView new KDCustomHTMLView
+          tagName    : "div"
+          cssClass   : "helper"
+          partial  : """ 
+            <p>The PhoneGap Developer app aims to lower the barrier of entry to creating PhoneGap applications. You can now immediately preview your app on a device without installing platform SDKs, registering devices, or even compiling code.<a href=“#{readMore}”> Read more…</a></p>
+            <p>
+              <strong>1. Install the PhoneGap Developer App</strong><br>
+              Now grab the mobile app, which is globally available in an app store near you:
+              <br><br>
+              <div class="links">
+                <ul>
+                  <li><a href="#{iosApp}">iOS from the App Store</a></li>
+                  <li><a href="#{androidApp}">Android from Google Play</a></li>
+                </ul>
+              </div>
+            </p>
+            <p>
+              <strong>2. Pair the CLI and Developer App</strong><br>
+              This is where the magic happens. The CLI starts a tiny web server to serve your project. Then, the PhoneGap Developer App connects to that server.
+              <br><br>
+              First, use the CLI to serve your project:
+              <img src="#{gitResources}/phonegap-pairing.png"/>
+              <br>
+              Second, enter the server address into the PhoneGap Developer App. Please ignore the ip address given by phonegap serve. <strong>Only use <span class="link">#{user}.kd.io:3000</span></strong>
+            </p>
+            <p>
+              <strong>3. Get to Work</strong><br>
+              Once paired, it’s business as usual. You can freely add, edit, and remove files from your project. Every saved change will automatically update the preview displayed in the PhoneGap Developer App.
+              <img src="#{gitResources}/phonegap-success.png"/>
+            </p>
+            <div class="separator">
+              Frequently Asked Questions
+            </div>
+            <p>
+              <strong>How come I don't see my terminal or the formatting is off?</strong><br>
+              The KD framework is still in development and all the bugs will be fixed soon. 
+              <br><br>
+              To fix formatting resize your browser window. Reload the page if the terminal or editor does not appear. Sorry for the inconvenience.
+            </p>
+            <br><br>
+            <p>
+              <strong>How do I create or open a phonegap app?</strong><br>
+              The PhoneGap Developer app is compatible with existing PhoneGap and Apache Cordova projects.
+              <br><br>
+              You can create a new app:
+              <div class="code">
+                $ phonegap create my-app
+                <br>
+                $ cd my-app/
+              </div>
+              <br>
+              Or open an existing app:
+              <div class="code">
+                $ cd ~/PhoneGap/my-existing-app
+              </div>
+            </p>
+            <br><br>
+            <p>
+              <strong>How do I create a phonegap server for testing?</strong><br>
+              Starting a phonegap server enables developers to test on multiple simultaneously.
+              <br><br>
+              Serve phonegap on port <strong>3000</strong>:
+              <div class="code">
+                $ cd my-app/
+                <br>
+                $ phonegap serve
+              </div>
+              <br>
+              Or serve to a specific port
+              <div class="code">
+                $ cd my-app/
+                <br>
+                $ phonegap serve --port &lt;port&gt;
+              </div>
+            </p>
+          """
+       
+        @workContainer.addSubView @workEditor = new Workspace
+          title      : "Text Editor"
+          name       : "TextEditor"
+          cssClass   : "editor-view"
+          panels     : [
+            title               : "Text Editor"
+            layout              :
+              direction         : "vertical"
+              sizes             : ["180px", "100%"]
+              splitName         : "BaseSplit"
+              views             : [
+                {
+                  type          : "custom"
+                  name          : "finder"
+                  paneClass     : FinderView
+                }                                       
+                {
+                  type          : "custom"
+                  name          : "JSEditor"
+                  paneClass     : EditorView
+                }                 
+              ]
+          ]
+          
+        @workContainer.addSubView @workTerminal = new Workspace
+          title      : "Terminal"
+          name       : "Terminal"
+          cssClass   : "terminal-view"
+          panels     : [
+            title               : "Terminal"
+            layout              :
+              direction         : "vertical"
+              sizes             : ["100%"]
+              splitName         : "BaseSplit"
+              views             : [
+                {
+                  type          : "custom"
+                  name          : "Terminal"
+                  paneClass    : TerminalView
+                }                 
+              ]
+          ]
+    
+  
+        @workEditor.once "viewAppended", =>
+          @emit 'ready'
+  
+          {JSEditor} = \
+            @workEditor.activePanel.panesByName
+  
+          JSEditor.ace.once 'ace.ready', =>
+        
+            JSEditor.ace.editor.on "change", \
+              _.debounce (@lazyBound 'emit', 'previewApp', no), 500
+  
       
-      @installContainer.addSubView new KDHeaderView
-        title         : "PhoneGap Installer"
-        type          : "big"
-
-      @installContainer.addSubView @installToggle = new KDToggleButton
-        cssClass        : 'toggle-button'
-        style           : "clean-gray" 
-        defaultState    : "Show details"
-        states          : [
-          title         : "Show details"
-          callback      : (cb)=>
-            @installTerminal.setClass 'in'
-            @installToggle.setClass 'toggle'
-            @installTerminal.webterm.setKeyView()
-            cb?()
-        ,
-          title         : "Hide details"
-          callback      : (cb)=>
-            @installTerminal.unsetClass 'in'
-            @installToggle.unsetClass 'toggle'
-            cb?()
-        ]
-
-      @installContainer.addSubView new KDCustomHTMLView
-        tagName       : 'img'
-        cssClass      : 'logo'
-        attributes    :
-          src         : "#{gitResources}/phonegap.png"
-
-      @installContainer.addSubView @installProgress = new KDProgressBarView
-        initial       : 100
-        title         : "Checking installation..."
-
-      @installContainer.addSubView @installTerminal = new TerminalPane
-        cssClass      : 'terminal'
-
-      @installContainer.addSubView @installButton = new KDButtonView
-        title         : "Install PhoneGap"
-        cssClass      : 'main-button solid'
-        loader        :
-          color       : "#FFFFFF"
-          diameter    : 12
-        callback      : => @installCallback()
-
-      @installContainer.addSubView new KDCustomHTMLView
-        cssClass : "phonegap-help"
-        partial  : """
-          <p>Easily create apps using the web technologies you know and love: <strong>HTML</strong>, <strong>CSS</strong>, and <strong>JavaScript</strong>.</p>
-          <p>PhoneGap is a free and open source framework that allows you to create mobile apps using standardized web APIs for the platforms you care about. For more information checkout phonegaps <a href="http://phonegap.com/">website</a>.</p>
-        """
+        #Installer Container
+        @addSubView @installContainer = new KDCustomHTMLView
+          tagName    : "div"
+          cssClass   : "install-container"
+        
+        @installContainer.addSubView new KDHeaderView
+          title         : "PhoneGap Installer"
+          type          : "big"
+  
+        @installContainer.addSubView @installToggle = new KDToggleButton
+          cssClass        : 'toggle-button'
+          style           : "clean-gray" 
+          defaultState    : "Show details"
+          states          : [
+            title         : "Show details"
+            callback      : (cb)=>
+              @installTerminal.setClass 'in'
+              @installToggle.setClass 'toggle'
+              @installTerminal.webterm.setKeyView()
+              cb?()
+          ,
+            title         : "Hide details"
+            callback      : (cb)=>
+              @installTerminal.unsetClass 'in'
+              @installToggle.unsetClass 'toggle'
+              cb?()
+          ]
+  
+        @installContainer.addSubView new KDCustomHTMLView
+          tagName       : 'img'
+          cssClass      : 'logo'
+          attributes    :
+            src         : "#{gitResources}/phonegap.png"
+  
+        @installContainer.addSubView @installProgress = new KDProgressBarView
+          initial       : 100
+          title         : "Checking installation..."
+  
+        @installContainer.addSubView @installTerminal = new TerminalPane
+          cssClass      : 'terminal'
+  
+        @installContainer.addSubView @installButton = new KDButtonView
+          title         : "Install PhoneGap"
+          cssClass      : 'main-button solid'
+          loader        :
+            color       : "#FFFFFF"
+            diameter    : 12
+          callback      : => @installCallback()
+  
+        @installContainer.addSubView new KDCustomHTMLView
+          cssClass : "phonegap-help"
+          partial  : """
+            <p>Easily create apps using the web technologies you know and love: <strong>HTML</strong>, <strong>CSS</strong>, and <strong>JavaScript</strong>.</p>
+            <p>PhoneGap is a free and open source framework that allows you to create mobile apps using standardized web APIs for the platforms you care about. For more information checkout phonegaps <a href="http://phonegap.com/">website</a>.</p>
+          """
       
-      @watcher = new LogWatcher
-      @checkState()
+        @watcher = new LogWatcher
+        @checkState()
+    @kiteHelper.getKite()
   
   startWork:->
     {Terminal} = @workTerminal.activePanel.panesByName
@@ -406,20 +475,21 @@ class PhonegapMainView extends KDView
         @switchState 'ready'
         
   switchState:(state = 'run')->
+    @loadingContainer.hide()
     @watcher.off 'UpdateProgress'
 
     switch state
       when 'install'
-        @installContainer.show()
-        @workContainer.hide()
+        @installContainer.setClass "active"
+        @workContainer.unsetClass "active"
         @installButton.hideLoader()
       when 'ready'
-        @installContainer.hide()
-        @workContainer.show()
+        @installContainer.unsetClass "active"
+        @workContainer.setClass "active"
         @startWork()
       when 'demo'
-        @installContainer.hide()
-        @workContainer.show()
+        @installContainer.unsetClass "active"
+        @workContainer.setClass "active"
         @startDemo()
     
     @workSpaceFix()

@@ -4,15 +4,30 @@
   background: #fff;
 }
 
+.phonegap .loading-container {
+  position: absolute;
+  top: calc(50% - 25px);
+  left: 0;
+  width: 100%;
+  height: 50px;
+  font-size: 32px;
+  text-align: center;
+}
+ 
 .phonegap .install-container {
-  position: relative;
-  padding: 20px 10px 0 10px;
+  position: absolute;
+  top: 55px;
+  left: calc(50% - 300px);
+  padding: 20px 0;
   width: 600px;
-  height: calc(100% - 55px);
   background-color: rgba(255,255,255,0.9);
   border-radius: 3px;
-  margin: 0 auto;
   overflow: auto;
+  opacity: 0;
+}
+
+.phonegap .install-container.active {
+  opacity: 1;
 }
 
 .phonegap .install-container .toggle-button {
@@ -108,11 +123,19 @@
 }
 
 .phonegap .work-container {
+  position: absolute;
+  top: 0;
+  left: 0;
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
   background: #fff;
+  opacity: 0;
+}
+
+.phonegap .work-container.active {
+  opacity: 1;
 }
 
 .phonegap .work-container .download-view {

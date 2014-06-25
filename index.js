@@ -1,23 +1,108 @@
-/* Compiled by kdc on Wed Jun 25 2014 22:00:29 GMT+0000 (UTC) */
+/* Compiled by kdc on Wed Jun 25 2014 23:36:37 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
-var EditorView, FinderView, LogWatcher, PhonegapController, PhonegapMainView, TerminalView, _ref,
+var EditorView, FinderView, KiteHelper, LogWatcher, PhonegapController, PhonegapMainView, TerminalView, _ref, _ref1,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+KiteHelper = (function(_super) {
+  __extends(KiteHelper, _super);
+
+  function KiteHelper() {
+    _ref = KiteHelper.__super__.constructor.apply(this, arguments);
+    return _ref;
+  }
+
+  KiteHelper.prototype.getReady = function() {
+    var _this = this;
+    return new Promise(function(resolve, reject) {
+      var JVM;
+      JVM = KD.remote.api.JVM;
+      return JVM.fetchVmsByContext(function(err, vms) {
+        var alias, kiteController, vm, _i, _len;
+        if (err) {
+          console.warn(err);
+        }
+        if (!vms) {
+          return;
+        }
+        _this._vms = vms;
+        _this._kites = {};
+        kiteController = KD.getSingleton('kiteController');
+        for (_i = 0, _len = vms.length; _i < _len; _i++) {
+          vm = vms[_i];
+          alias = vm.hostnameAlias;
+          _this._kites[alias] = kiteController.getKite("os-" + vm.region, alias, 'os');
+        }
+        _this.emit('ready');
+        return resolve();
+      });
+    });
+  };
+
+  KiteHelper.prototype.getVm = function() {
+    this._vm || (this._vm = this._vms.first);
+    return this._vm;
+  };
+
+  KiteHelper.prototype.getKite = function() {
+    var _this = this;
+    return new Promise(function(resolve, reject) {
+      return _this.getReady().then(function() {
+        var kite, vm;
+        vm = _this.getVm().hostnameAlias;
+        if (!(kite = _this._kites[vm])) {
+          return reject({
+            message: "No such kite for " + vm
+          });
+        }
+        return kite.vmOn().then(function() {
+          return resolve(kite);
+        });
+      });
+    });
+  };
+
+  KiteHelper.prototype.run = function(cmd, timeout, callback) {
+    var _ref1;
+    if (!callback) {
+      _ref1 = [callback, timeout], timeout = _ref1[0], callback = _ref1[1];
+    }
+    if (timeout == null) {
+      timeout = 10 * 60 * 1000;
+    }
+    return this.getKite().then(function(kite) {
+      kite.options.timeout = timeout;
+      return kite.exec({
+        command: cmd
+      }).then(function(result) {
+        return callback(null, result);
+      });
+    })["catch"](function(err) {
+      return callback({
+        message: "Failed to run " + cmd,
+        details: err
+      });
+    });
+  };
+
+  return KiteHelper;
+
+})(KDController);
 
 LogWatcher = (function(_super) {
   __extends(LogWatcher, _super);
 
   function LogWatcher() {
-    _ref = LogWatcher.__super__.constructor.apply(this, arguments);
-    return _ref;
+    _ref1 = LogWatcher.__super__.constructor.apply(this, arguments);
+    return _ref1;
   }
 
   LogWatcher.prototype.fileAdded = function(change) {
-    var name, percentage, status, _ref1;
+    var name, percentage, status, _ref2;
     name = change.file.name;
-    _ref1 = name.split('-'), percentage = _ref1[0], status = _ref1[1];
+    _ref2 = name.split('-'), percentage = _ref2[0], status = _ref2[1];
     return this.emit("UpdateProgress", percentage, status);
   };
 
@@ -282,146 +367,155 @@ PhonegapMainView = (function(_super) {
 
   PhonegapMainView.prototype.viewAppended = function() {
     var _this = this;
-    return KD.singletons.appManager.require('Teamwork', function() {
-      _this.addSubView(_this.workContainer = new KDCustomHTMLView({
-        tagName: "div",
-        cssClass: "work-container hidden"
-      }));
-      _this.workContainer.addSubView(_this.workDownload = new KDCustomHTMLView({
-        tagName: "div",
-        cssClass: "download-view"
-      }));
-      _this.workDownload.addSubView(new KDCustomHTMLView({
-        tagName: 'img',
-        cssClass: 'logo',
-        attributes: {
-          src: "" + gitResources + "/app.png"
-        }
-      }));
-      _this.workDownload.addSubView(new KDCustomHTMLView({
-        tagName: "div",
-        cssClass: "helper",
-        partial: " \n<p>The PhoneGap Developer app aims to lower the barrier of entry to creating PhoneGap applications. You can now immediately preview your app on a device without installing platform SDKs, registering devices, or even compiling code.<a href=“" + readMore + "”> Read more…</a></p>\n<p>\n  <strong>1. Install the PhoneGap Developer App</strong><br>\n  Now grab the mobile app, which is globally available in an app store near you:\n  <br><br>\n  <div class=\"links\">\n    <ul>\n      <li><a href=\"" + iosApp + "\">iOS from the App Store</a></li>\n      <li><a href=\"" + androidApp + "\">Android from Google Play</a></li>\n    </ul>\n  </div>\n</p>\n<p>\n  <strong>2. Pair the CLI and Developer App</strong><br>\n  This is where the magic happens. The CLI starts a tiny web server to serve your project. Then, the PhoneGap Developer App connects to that server.\n  <br><br>\n  First, use the CLI to serve your project:\n  <img src=\"" + gitResources + "/phonegap-pairing.png\"/>\n  <br>\n  Second, enter the server address into the PhoneGap Developer App. Please ignore the ip address given by phonegap serve. <strong>Only use <span class=\"link\">" + user + ".kd.io:3000</span></strong>\n</p>\n<p>\n  <strong>3. Get to Work</strong><br>\n  Once paired, it’s business as usual. You can freely add, edit, and remove files from your project. Every saved change will automatically update the preview displayed in the PhoneGap Developer App.\n  <img src=\"" + gitResources + "/phonegap-success.png\"/>\n</p>\n<div class=\"separator\">\n  Frequently Asked Questions\n</div>\n<p>\n  <strong>How come I don't see my terminal or the formatting is off?</strong><br>\n  The KD framework is still in development and all the bugs will be fixed soon. \n  <br><br>\n  To fix formatting resize your browser window. Reload the page if the terminal or editor does not appear. Sorry for the inconvenience.\n</p>\n<br><br>\n<p>\n  <strong>How do I create or open a phonegap app?</strong><br>\n  The PhoneGap Developer app is compatible with existing PhoneGap and Apache Cordova projects.\n  <br><br>\n  You can create a new app:\n  <div class=\"code\">\n    $ phonegap create my-app\n    <br>\n    $ cd my-app/\n  </div>\n  <br>\n  Or open an existing app:\n  <div class=\"code\">\n    $ cd ~/PhoneGap/my-existing-app\n  </div>\n</p>\n<br><br>\n<p>\n  <strong>How do I create a phonegap server for testing?</strong><br>\n  Starting a phonegap server enables developers to test on multiple simultaneously.\n  <br><br>\n  Serve phonegap on port <strong>3000</strong>:\n  <div class=\"code\">\n    $ cd my-app/\n    <br>\n    $ phonegap serve\n  </div>\n  <br>\n  Or serve to a specific port\n  <div class=\"code\">\n    $ cd my-app/\n    <br>\n    $ phonegap serve --port &lt;port&gt;\n  </div>\n</p>"
-      }));
-      _this.workContainer.addSubView(_this.workEditor = new Workspace({
-        title: "Text Editor",
-        name: "TextEditor",
-        cssClass: "editor-view",
-        panels: [
-          {
-            title: "Text Editor",
-            layout: {
-              direction: "vertical",
-              sizes: ["180px", "100%"],
-              splitName: "BaseSplit",
-              views: [
-                {
-                  type: "custom",
-                  name: "finder",
-                  paneClass: FinderView
-                }, {
-                  type: "custom",
-                  name: "JSEditor",
-                  paneClass: EditorView
-                }
-              ]
-            }
+    this.addSubView(this.loadingContainer = new KDCustomHTMLView({
+      tagName: "div",
+      cssClass: "loading-container",
+      partial: "Please wait while vm turns on..."
+    }));
+    this.kiteHelper = new KiteHelper;
+    this.kiteHelper.ready(function() {
+      return KD.singletons.appManager.require('Teamwork', function() {
+        _this.addSubView(_this.workContainer = new KDCustomHTMLView({
+          tagName: "div",
+          cssClass: "work-container"
+        }));
+        _this.workContainer.addSubView(_this.workDownload = new KDCustomHTMLView({
+          tagName: "div",
+          cssClass: "download-view"
+        }));
+        _this.workDownload.addSubView(new KDCustomHTMLView({
+          tagName: 'img',
+          cssClass: 'logo',
+          attributes: {
+            src: "" + gitResources + "/app.png"
           }
-        ]
-      }));
-      _this.workContainer.addSubView(_this.workTerminal = new Workspace({
-        title: "Terminal",
-        name: "Terminal",
-        cssClass: "terminal-view",
-        panels: [
-          {
-            title: "Terminal",
-            layout: {
-              direction: "vertical",
-              sizes: ["100%"],
-              splitName: "BaseSplit",
-              views: [
-                {
-                  type: "custom",
-                  name: "Terminal",
-                  paneClass: TerminalView
-                }
-              ]
+        }));
+        _this.workDownload.addSubView(new KDCustomHTMLView({
+          tagName: "div",
+          cssClass: "helper",
+          partial: " \n<p>The PhoneGap Developer app aims to lower the barrier of entry to creating PhoneGap applications. You can now immediately preview your app on a device without installing platform SDKs, registering devices, or even compiling code.<a href=“" + readMore + "”> Read more…</a></p>\n<p>\n  <strong>1. Install the PhoneGap Developer App</strong><br>\n  Now grab the mobile app, which is globally available in an app store near you:\n  <br><br>\n  <div class=\"links\">\n    <ul>\n      <li><a href=\"" + iosApp + "\">iOS from the App Store</a></li>\n      <li><a href=\"" + androidApp + "\">Android from Google Play</a></li>\n    </ul>\n  </div>\n</p>\n<p>\n  <strong>2. Pair the CLI and Developer App</strong><br>\n  This is where the magic happens. The CLI starts a tiny web server to serve your project. Then, the PhoneGap Developer App connects to that server.\n  <br><br>\n  First, use the CLI to serve your project:\n  <img src=\"" + gitResources + "/phonegap-pairing.png\"/>\n  <br>\n  Second, enter the server address into the PhoneGap Developer App. Please ignore the ip address given by phonegap serve. <strong>Only use <span class=\"link\">" + user + ".kd.io:3000</span></strong>\n</p>\n<p>\n  <strong>3. Get to Work</strong><br>\n  Once paired, it’s business as usual. You can freely add, edit, and remove files from your project. Every saved change will automatically update the preview displayed in the PhoneGap Developer App.\n  <img src=\"" + gitResources + "/phonegap-success.png\"/>\n</p>\n<div class=\"separator\">\n  Frequently Asked Questions\n</div>\n<p>\n  <strong>How come I don't see my terminal or the formatting is off?</strong><br>\n  The KD framework is still in development and all the bugs will be fixed soon. \n  <br><br>\n  To fix formatting resize your browser window. Reload the page if the terminal or editor does not appear. Sorry for the inconvenience.\n</p>\n<br><br>\n<p>\n  <strong>How do I create or open a phonegap app?</strong><br>\n  The PhoneGap Developer app is compatible with existing PhoneGap and Apache Cordova projects.\n  <br><br>\n  You can create a new app:\n  <div class=\"code\">\n    $ phonegap create my-app\n    <br>\n    $ cd my-app/\n  </div>\n  <br>\n  Or open an existing app:\n  <div class=\"code\">\n    $ cd ~/PhoneGap/my-existing-app\n  </div>\n</p>\n<br><br>\n<p>\n  <strong>How do I create a phonegap server for testing?</strong><br>\n  Starting a phonegap server enables developers to test on multiple simultaneously.\n  <br><br>\n  Serve phonegap on port <strong>3000</strong>:\n  <div class=\"code\">\n    $ cd my-app/\n    <br>\n    $ phonegap serve\n  </div>\n  <br>\n  Or serve to a specific port\n  <div class=\"code\">\n    $ cd my-app/\n    <br>\n    $ phonegap serve --port &lt;port&gt;\n  </div>\n</p>"
+        }));
+        _this.workContainer.addSubView(_this.workEditor = new Workspace({
+          title: "Text Editor",
+          name: "TextEditor",
+          cssClass: "editor-view",
+          panels: [
+            {
+              title: "Text Editor",
+              layout: {
+                direction: "vertical",
+                sizes: ["180px", "100%"],
+                splitName: "BaseSplit",
+                views: [
+                  {
+                    type: "custom",
+                    name: "finder",
+                    paneClass: FinderView
+                  }, {
+                    type: "custom",
+                    name: "JSEditor",
+                    paneClass: EditorView
+                  }
+                ]
+              }
             }
-          }
-        ]
-      }));
-      _this.workEditor.once("viewAppended", function() {
-        var JSEditor;
-        _this.emit('ready');
-        JSEditor = _this.workEditor.activePanel.panesByName.JSEditor;
-        return JSEditor.ace.once('ace.ready', function() {
-          return JSEditor.ace.editor.on("change", _.debounce(_this.lazyBound('emit', 'previewApp', false), 500));
+          ]
+        }));
+        _this.workContainer.addSubView(_this.workTerminal = new Workspace({
+          title: "Terminal",
+          name: "Terminal",
+          cssClass: "terminal-view",
+          panels: [
+            {
+              title: "Terminal",
+              layout: {
+                direction: "vertical",
+                sizes: ["100%"],
+                splitName: "BaseSplit",
+                views: [
+                  {
+                    type: "custom",
+                    name: "Terminal",
+                    paneClass: TerminalView
+                  }
+                ]
+              }
+            }
+          ]
+        }));
+        _this.workEditor.once("viewAppended", function() {
+          var JSEditor;
+          _this.emit('ready');
+          JSEditor = _this.workEditor.activePanel.panesByName.JSEditor;
+          return JSEditor.ace.once('ace.ready', function() {
+            return JSEditor.ace.editor.on("change", _.debounce(_this.lazyBound('emit', 'previewApp', false), 500));
+          });
         });
-      });
-      _this.addSubView(_this.installContainer = new KDCustomHTMLView({
-        tagName: "div",
-        cssClass: "install-container hidden"
-      }));
-      _this.installContainer.addSubView(new KDHeaderView({
-        title: "PhoneGap Installer",
-        type: "big"
-      }));
-      _this.installContainer.addSubView(_this.installToggle = new KDToggleButton({
-        cssClass: 'toggle-button',
-        style: "clean-gray",
-        defaultState: "Show details",
-        states: [
-          {
-            title: "Show details",
-            callback: function(cb) {
-              _this.installTerminal.setClass('in');
-              _this.installToggle.setClass('toggle');
-              _this.installTerminal.webterm.setKeyView();
-              return typeof cb === "function" ? cb() : void 0;
+        _this.addSubView(_this.installContainer = new KDCustomHTMLView({
+          tagName: "div",
+          cssClass: "install-container"
+        }));
+        _this.installContainer.addSubView(new KDHeaderView({
+          title: "PhoneGap Installer",
+          type: "big"
+        }));
+        _this.installContainer.addSubView(_this.installToggle = new KDToggleButton({
+          cssClass: 'toggle-button',
+          style: "clean-gray",
+          defaultState: "Show details",
+          states: [
+            {
+              title: "Show details",
+              callback: function(cb) {
+                _this.installTerminal.setClass('in');
+                _this.installToggle.setClass('toggle');
+                _this.installTerminal.webterm.setKeyView();
+                return typeof cb === "function" ? cb() : void 0;
+              }
+            }, {
+              title: "Hide details",
+              callback: function(cb) {
+                _this.installTerminal.unsetClass('in');
+                _this.installToggle.unsetClass('toggle');
+                return typeof cb === "function" ? cb() : void 0;
+              }
             }
-          }, {
-            title: "Hide details",
-            callback: function(cb) {
-              _this.installTerminal.unsetClass('in');
-              _this.installToggle.unsetClass('toggle');
-              return typeof cb === "function" ? cb() : void 0;
-            }
+          ]
+        }));
+        _this.installContainer.addSubView(new KDCustomHTMLView({
+          tagName: 'img',
+          cssClass: 'logo',
+          attributes: {
+            src: "" + gitResources + "/phonegap.png"
           }
-        ]
-      }));
-      _this.installContainer.addSubView(new KDCustomHTMLView({
-        tagName: 'img',
-        cssClass: 'logo',
-        attributes: {
-          src: "" + gitResources + "/phonegap.png"
-        }
-      }));
-      _this.installContainer.addSubView(_this.installProgress = new KDProgressBarView({
-        initial: 100,
-        title: "Checking installation..."
-      }));
-      _this.installContainer.addSubView(_this.installTerminal = new TerminalPane({
-        cssClass: 'terminal'
-      }));
-      _this.installContainer.addSubView(_this.installButton = new KDButtonView({
-        title: "Install PhoneGap",
-        cssClass: 'main-button solid',
-        loader: {
-          color: "#FFFFFF",
-          diameter: 12
-        },
-        callback: function() {
-          return _this.installCallback();
-        }
-      }));
-      _this.installContainer.addSubView(new KDCustomHTMLView({
-        cssClass: "phonegap-help",
-        partial: "<p>Easily create apps using the web technologies you know and love: <strong>HTML</strong>, <strong>CSS</strong>, and <strong>JavaScript</strong>.</p>\n<p>PhoneGap is a free and open source framework that allows you to create mobile apps using standardized web APIs for the platforms you care about. For more information checkout phonegaps <a href=\"http://phonegap.com/\">website</a>.</p>"
-      }));
-      _this.watcher = new LogWatcher;
-      return _this.checkState();
+        }));
+        _this.installContainer.addSubView(_this.installProgress = new KDProgressBarView({
+          initial: 100,
+          title: "Checking installation..."
+        }));
+        _this.installContainer.addSubView(_this.installTerminal = new TerminalPane({
+          cssClass: 'terminal'
+        }));
+        _this.installContainer.addSubView(_this.installButton = new KDButtonView({
+          title: "Install PhoneGap",
+          cssClass: 'main-button solid',
+          loader: {
+            color: "#FFFFFF",
+            diameter: 12
+          },
+          callback: function() {
+            return _this.installCallback();
+          }
+        }));
+        _this.installContainer.addSubView(new KDCustomHTMLView({
+          cssClass: "phonegap-help",
+          partial: "<p>Easily create apps using the web technologies you know and love: <strong>HTML</strong>, <strong>CSS</strong>, and <strong>JavaScript</strong>.</p>\n<p>PhoneGap is a free and open source framework that allows you to create mobile apps using standardized web APIs for the platforms you care about. For more information checkout phonegaps <a href=\"http://phonegap.com/\">website</a>.</p>"
+        }));
+        _this.watcher = new LogWatcher;
+        return _this.checkState();
+      });
     });
+    return this.kiteHelper.getKite();
   };
 
   PhonegapMainView.prototype.startWork = function() {
@@ -460,21 +554,22 @@ PhonegapMainView = (function(_super) {
     if (state == null) {
       state = 'run';
     }
+    this.loadingContainer.hide();
     this.watcher.off('UpdateProgress');
     switch (state) {
       case 'install':
-        this.installContainer.show();
-        this.workContainer.hide();
+        this.installContainer.setClass("active");
+        this.workContainer.unsetClass("active");
         this.installButton.hideLoader();
         break;
       case 'ready':
-        this.installContainer.hide();
-        this.workContainer.show();
+        this.installContainer.unsetClass("active");
+        this.workContainer.setClass("active");
         this.startWork();
         break;
       case 'demo':
-        this.installContainer.hide();
-        this.workContainer.show();
+        this.installContainer.unsetClass("active");
+        this.workContainer.setClass("active");
         this.startDemo();
     }
     return this.workSpaceFix();
