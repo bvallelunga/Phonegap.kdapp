@@ -211,16 +211,25 @@ class PhonegapMainView extends KDView
             First, use the CLI to serve your project:
             <img src="#{gitResources}/phonegap-pairing.png"/>
             <br>
-            Second, enter the server address into the PhoneGap Developer App. In this example, the address is <strong>#{user}.kd.io:3000</strong>
+            Second, enter the server address into the PhoneGap Developer App. Please ignore the ip address given by phonegap serve. <strong>Only use <span class="link">#{user}.kd.io:3000</span></strong>
           </p>
           <p>
             <strong>3. Get to Work</strong><br>
             Once paired, it’s business as usual. You can freely add, edit, and remove files from your project. Every saved change will automatically update the preview displayed in the PhoneGap Developer App.
             <img src="#{gitResources}/phonegap-success.png"/>
           </p>
-          <div class="separator"></div>
+          <div class="separator">
+            Frequently Asked Questions
+          </div>
           <p>
-            <strong>Creating/Opening an App</strong><br>
+            <strong>How come I don't see my terminal or the formatting is off?</strong><br>
+            The KD framework is still in development and all the bugs will be fixed soon. 
+            <br><br>
+            To fix formatting resize your browser window. Reload the page if the terminal or editor does not appear. Sorry for the inconvenience.
+          </p>
+          <br><br>
+          <p>
+            <strong>How do I create or open a phonegap app?</strong><br>
             The PhoneGap Developer app is compatible with existing PhoneGap and Apache Cordova projects.
             <br><br>
             You can create a new app:
@@ -233,6 +242,25 @@ class PhonegapMainView extends KDView
             Or open an existing app:
             <div class="code">
               $ cd ~/PhoneGap/my-existing-app
+            </div>
+          </p>
+          <br><br>
+          <p>
+            <strong>How do I create a phonegap server for testing?</strong><br>
+            Starting a phonegap server enables developers to test on multiple simultaneously.
+            <br><br>
+            Serve phonegap on port <strong>3000</strong>:
+            <div class="code">
+              $ cd my-app/
+              <br>
+              $ phonegap serve
+            </div>
+            <br>
+            Or serve to a specific port
+            <div class="code">
+              $ cd my-app/
+              <br>
+              $ phonegap serve --port &lt;port&gt;
             </div>
           </p>
         """
@@ -269,7 +297,7 @@ class PhonegapMainView extends KDView
           title               : "Terminal"
           layout              :
             direction         : "vertical"
-            sizes             : ["100%", null]
+            sizes             : ["100%"]
             splitName         : "BaseSplit"
             views             : [
               {
