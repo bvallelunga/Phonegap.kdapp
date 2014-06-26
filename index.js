@@ -1,4 +1,4 @@
-/* Compiled by kdc on Thu Jun 26 2014 00:28:12 GMT+0000 (UTC) */
+/* Compiled by kdc on Thu Jun 26 2014 01:02:36 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -370,7 +370,7 @@ PhonegapMainView = (function(_super) {
     this.addSubView(this.loadingContainer = new KDCustomHTMLView({
       tagName: "div",
       cssClass: "loading-container",
-      partial: "Please wait while your vm turns on..."
+      partial: "<img src=\"" + gitResources + "/loading.gif\"/>\n<br><br>\nPlease wait while your vm turns on..."
     }));
     this.kiteHelper = new KiteHelper;
     this.kiteHelper.ready(function() {
@@ -509,7 +509,7 @@ PhonegapMainView = (function(_super) {
         }));
         _this.installContainer.addSubView(new KDCustomHTMLView({
           cssClass: "phonegap-help",
-          partial: "<p><strong>Note: Node.js and PhoneGap will be installed/updated.</strong></p>\n<p>The Koding PhoneGap app provides a playground where mobile app development can occur.\nBy installing the Phonegap Developer companion on your <a href=\"" + iosApp + "\">iPhone</a> or <a href=\"" + androidApp + "\">Android</a> you will beable to view and test your amazing new app in realtime.</p>\n<p><img src=\"https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/screenshot.png\"/></p>\n"
+          partial: "<p>The Koding PhoneGap app provides you with a playground where you can easily do mobile app development for Android or iOS.</p>\n<p>By installing the Phonegap Developer companion app on either your <a href=\"" + iosApp + "\">iPhone</a> or your <a href=\"" + androidApp + "\">Android</a> device, you will beable to view and test your amazing new app in realtime.</p>\n<p>Build on Koding, run on your phone...simple! :)</p>\n<p><img src=\"https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/screenshot.png\"/></p>\n<p><strong>Note: Node.js and PhoneGap will be installed/updated.</strong></p>"
         }));
         _this.watcher = new LogWatcher;
         return _this.checkState();
