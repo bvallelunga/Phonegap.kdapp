@@ -491,11 +491,11 @@ class PhonegapMainView extends KDView
         @workContainer.unsetClass "active"
         @installButton.hideLoader()
       when 'ready'
-        @installContainer.unsetClass "active"
+        @installContainer.hide()
         @workContainer.setClass "active"
         @startWork()
       when 'demo'
-        @installContainer.unsetClass "active"
+        @installContainer.hide()
         @workContainer.setClass "active"
         @startDemo()
     
