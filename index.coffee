@@ -345,7 +345,7 @@ class PhonegapMainView extends KDView
             title               : "Text Editor"
             layout              :
               direction         : "vertical"
-              sizes             : ["180px", "100%"]
+              sizes             : ["180px", "100% - 180px"]
               splitName         : "BaseSplit"
               views             : [
                 {

@@ -6,6 +6,7 @@
 
 .phonegap .loading-container {
   position: absolute;
+  z-index: 3;
   top: calc(50% - 75px);
   left: 0;
   width: 100%;
@@ -21,6 +22,7 @@
 
 .phonegap .install-container {
   position: absolute;
+  z-index: 2;
   top: 55px;
   left: calc(50% - 300px);
   padding: 20px 0;
@@ -34,6 +36,7 @@
 
 .phonegap .install-container.active {
   opacity: 1;
+  z-index: 3;
 }
 
 .phonegap .install-container .toggle-button {
@@ -130,6 +133,7 @@
 
 .phonegap .work-container {
   position: absolute;
+  z-index: 1;
   top: 0;
   left: 0;
   margin: 0;
@@ -142,6 +146,7 @@
 
 .phonegap .work-container.active {
   opacity: 1;
+  z-index: 3;
 }
 
 .phonegap .work-container .download-view {

@@ -1,4 +1,4 @@
-/* Compiled by kdc on Thu Jun 26 2014 01:08:11 GMT+0000 (UTC) */
+/* Compiled by kdc on Thu Jun 26 2014 01:20:17 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -404,7 +404,7 @@ PhonegapMainView = (function(_super) {
               title: "Text Editor",
               layout: {
                 direction: "vertical",
-                sizes: ["180px", "100%"],
+                sizes: ["180px", "100% - 180px"],
                 splitName: "BaseSplit",
                 views: [
                   {
