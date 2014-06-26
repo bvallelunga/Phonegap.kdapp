@@ -235,7 +235,7 @@ class PhonegapMainView extends KDView
           tagName    : "div"
           cssClass   : "loading-container"
           partial    : """
-            <img src="#{gitResources}/loading.gi"/>
+            <img src="#{gitResources}/loading.gif"/>
             <br><br>
             Please wait while your vm turns on...
           """
