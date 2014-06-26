@@ -6,10 +6,10 @@
 
 .phonegap .loading-container {
   position: absolute;
-  top: calc(50% - 25px);
+  top: calc(50% - 75px);
   left: 0;
   width: 100%;
-  height: 50px;
+  height: 150px;
   font-size: 32px;
   text-align: center;
 }
