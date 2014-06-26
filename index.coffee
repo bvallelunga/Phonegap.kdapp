@@ -441,8 +441,11 @@ class PhonegapMainView extends KDView
         @installContainer.addSubView new KDCustomHTMLView
           cssClass : "phonegap-help"
           partial  : """
-            <p>Easily create apps using the web technologies you know and love: <strong>HTML</strong>, <strong>CSS</strong>, and <strong>JavaScript</strong>.</p>
-            <p>PhoneGap is a free and open source framework that allows you to create mobile apps using standardized web APIs for the platforms you care about. For more information checkout phonegaps <a href="http://phonegap.com/">website</a>.</p>
+            <p><strong>Note: Node.js and PhoneGap will be installed/updated.</strong></p>
+            <p>The Koding PhoneGap app provides a playground where mobile app development can occur.
+            By installing the Phonegap Developer companion on your <a href="#{iosApp}">iPhone</a> or <a href="#{androidApp}">Android</a> you will beable to view and test your amazing new app in realtime.</p>
+            <p><img src="https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/screenshot.png"/></p>
+
           """
       
         @watcher = new LogWatcher
