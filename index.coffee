@@ -295,9 +295,9 @@ class PhonegapMainView extends KDView
             </div>
             <p>
               <strong>How come I don't see my terminal or the formatting is off?</strong><br>
-              The KD framework is still in development and all the bugs will be fixed soon. 
+              This app has a resizing bug that is being looked into and will be fixed soon. 
               <br><br>
-              To fix formatting resize your browser window. Reload the page if the terminal or editor does not appear. Sorry for the inconvenience.
+              To fix formatting resize your browser window. Reload the page if the terminal or editor does not appear.
             </p>
             <br><br>
             <p>
