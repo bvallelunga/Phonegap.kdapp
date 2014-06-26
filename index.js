@@ -1,4 +1,4 @@
-/* Compiled by kdc on Thu Jun 26 2014 00:23:35 GMT+0000 (UTC) */
+/* Compiled by kdc on Thu Jun 26 2014 00:28:12 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -370,7 +370,7 @@ PhonegapMainView = (function(_super) {
     this.addSubView(this.loadingContainer = new KDCustomHTMLView({
       tagName: "div",
       cssClass: "loading-container",
-      partial: "Please wait while vm turns on..."
+      partial: "Please wait while your vm turns on..."
     }));
     this.kiteHelper = new KiteHelper;
     this.kiteHelper.ready(function() {
