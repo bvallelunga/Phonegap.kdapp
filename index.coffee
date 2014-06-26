@@ -234,7 +234,11 @@ class PhonegapMainView extends KDView
     @addSubView @loadingContainer = new KDCustomHTMLView
           tagName    : "div"
           cssClass   : "loading-container"
-          partial    : "Please wait while your vm turns on..."
+          partial    : """
+            <img src="#{gitResources}/loading.gi"/>
+            <br><br>
+            Please wait while your vm turns on...
+          """
     
     
     @kiteHelper = new KiteHelper
@@ -441,11 +445,11 @@ class PhonegapMainView extends KDView
         @installContainer.addSubView new KDCustomHTMLView
           cssClass : "phonegap-help"
           partial  : """
-            <p><strong>Note: Node.js and PhoneGap will be installed/updated.</strong></p>
-            <p>The Koding PhoneGap app provides a playground where mobile app development can occur.
-            By installing the Phonegap Developer companion on your <a href="#{iosApp}">iPhone</a> or <a href="#{androidApp}">Android</a> you will beable to view and test your amazing new app in realtime.</p>
+            <p>The Koding PhoneGap app provides you with a playground where you can easily do mobile app development for Android or iOS.</p>
+            <p>By installing the Phonegap Developer companion app on either your <a href="#{iosApp}">iPhone</a> or your <a href="#{androidApp}">Android</a> device, you will beable to view and test your amazing new app in realtime.</p>
+            <p>Build on Koding, run on your phone...simple! :)</p>
             <p><img src="https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/screenshot.png"/></p>
-
+            <p><strong>Note: Node.js and PhoneGap will be installed/updated.</strong></p>
           """
       
         @watcher = new LogWatcher
