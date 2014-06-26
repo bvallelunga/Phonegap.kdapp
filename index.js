@@ -1,4 +1,4 @@
-/* Compiled by kdc on Wed Jun 25 2014 23:43:43 GMT+0000 (UTC) */
+/* Compiled by kdc on Thu Jun 26 2014 00:23:35 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -509,7 +509,7 @@ PhonegapMainView = (function(_super) {
         }));
         _this.installContainer.addSubView(new KDCustomHTMLView({
           cssClass: "phonegap-help",
-          partial: "<p>Easily create apps using the web technologies you know and love: <strong>HTML</strong>, <strong>CSS</strong>, and <strong>JavaScript</strong>.</p>\n<p>PhoneGap is a free and open source framework that allows you to create mobile apps using standardized web APIs for the platforms you care about. For more information checkout phonegaps <a href=\"http://phonegap.com/\">website</a>.</p>"
+          partial: "<p><strong>Note: Node.js and PhoneGap will be installed/updated.</strong></p>\n<p>The Koding PhoneGap app provides a playground where mobile app development can occur.\nBy installing the Phonegap Developer companion on your <a href=\"" + iosApp + "\">iPhone</a> or <a href=\"" + androidApp + "\">Android</a> you will beable to view and test your amazing new app in realtime.</p>\n<p><img src=\"https://raw.githubusercontent.com/bvallelunga/PhoneGap.kdapp/master/resources/screenshot.png\"/></p>\n"
         }));
         _this.watcher = new LogWatcher;
         return _this.checkState();

@@ -234,7 +234,7 @@ class PhonegapMainView extends KDView
     @addSubView @loadingContainer = new KDCustomHTMLView
           tagName    : "div"
           cssClass   : "loading-container"
-          partial    : "Please wait while vm turns on..."
+          partial    : "Please wait while your vm turns on..."
     
     
     @kiteHelper = new KiteHelper
