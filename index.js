@@ -1,4 +1,4 @@
-/* Compiled by kdc on Thu Jun 26 2014 06:45:57 GMT+0000 (UTC) */
+/* Compiled by kdc on Fri Jun 27 2014 20:04:23 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -197,7 +197,7 @@ EditorView = (function(_super) {
     }
     options.cssClass = "editor-pane";
     EditorView.__super__.constructor.call(this, options, data);
-    this.storage = KD.singletons.localStorageController.storage("PhoneGap");
+    this.storage = KD.singletons.localStorageController.storage("Phonegap");
     this.createEditorInstance();
   }
 
@@ -343,7 +343,7 @@ PhonegapMainView = (function(_super) {
 
   domain = "" + user + ".kd.io";
 
-  outPath = "/tmp/_PhoneGapinstaller.out";
+  outPath = "/tmp/_Phonegapinstaller.out";
 
   phoneGapBin = "/usr/bin/phonegap";
 
@@ -393,7 +393,7 @@ PhonegapMainView = (function(_super) {
         _this.workDownload.addSubView(new KDCustomHTMLView({
           tagName: "div",
           cssClass: "helper",
-          partial: " \n<p>The PhoneGap Developer app aims to lower the barrier of entry to creating PhoneGap applications. You can now immediately preview your app on a device without installing platform SDKs, registering devices, or even compiling code.<a href=“" + readMore + "”> Read more…</a></p>\n<p>\n  <strong>1. Install the PhoneGap Developer App</strong><br>\n  Now grab the mobile app, which is globally available in an app store near you:\n  <br><br>\n  <div class=\"links\">\n    <ul>\n      <li><a href=\"" + iosApp + "\">iOS from the App Store</a></li>\n      <li><a href=\"" + androidApp + "\">Android from Google Play</a></li>\n    </ul>\n  </div>\n</p>\n<p>\n  <strong>2. Pair the CLI and Developer App</strong><br>\n  This is where the magic happens. The CLI starts a tiny web server to serve your project. Then, the PhoneGap Developer App connects to that server.\n  <br><br>\n  First, use the CLI to serve your project:\n  <img src=\"" + gitResources + "/phonegap-pairing.png\"/>\n  <br>\n  Second, enter the server address into the PhoneGap Developer App. Please ignore the ip address given by phonegap serve. <strong>Only use <span class=\"link\">" + user + ".kd.io:3000</span></strong>\n</p>\n<p>\n  <strong>3. Get to Work</strong><br>\n  Once paired, it’s business as usual. You can freely add, edit, and remove files from your project. Every saved change will automatically update the preview displayed in the PhoneGap Developer App.\n  <img src=\"" + gitResources + "/phonegap-success.png\"/>\n</p>\n<div class=\"separator\">\n  Frequently Asked Questions\n</div>\n<p>\n  <strong>How come I don't see my terminal or the formatting is off?</strong><br>\n  The KD framework is still in development and all the bugs will be fixed soon. \n  <br><br>\n  To fix formatting resize your browser window. Reload the page if the terminal or editor does not appear. Sorry for the inconvenience.\n</p>\n<br><br>\n<p>\n  <strong>How do I create or open a phonegap app?</strong><br>\n  The PhoneGap Developer app is compatible with existing PhoneGap and Apache Cordova projects.\n  <br><br>\n  You can create a new app:\n  <div class=\"code\">\n    $ phonegap create my-app\n    <br>\n    $ cd my-app/\n  </div>\n  <br>\n  Or open an existing app:\n  <div class=\"code\">\n    $ cd ~/PhoneGap/my-existing-app\n  </div>\n</p>\n<br><br>\n<p>\n  <strong>How do I create a phonegap server for testing?</strong><br>\n  Starting a phonegap server enables developers to test on multiple simultaneously.\n  <br><br>\n  Serve phonegap on port <strong>3000</strong>:\n  <div class=\"code\">\n    $ cd my-app/\n    <br>\n    $ phonegap serve\n  </div>\n  <br>\n  Or serve to a specific port\n  <div class=\"code\">\n    $ cd my-app/\n    <br>\n    $ phonegap serve --port &lt;port&gt;\n  </div>\n</p>"
+          partial: " \n<p>The PhoneGap Developer app aims to lower the barrier of entry to creating PhoneGap applications. You can now immediately preview your app on a device without installing platform SDKs, registering devices, or even compiling code.<a href=“" + readMore + "”> Read more…</a></p>\n<p>\n  <strong>1. Install the PhoneGap Developer App</strong><br>\n  Now grab the mobile app, which is globally available in an app store near you:\n  <br><br>\n  <div class=\"links\">\n    <ul>\n      <li><a href=\"" + iosApp + "\">iOS from the App Store</a></li>\n      <li><a href=\"" + androidApp + "\">Android from Google Play</a></li>\n    </ul>\n  </div>\n</p>\n<p>\n  <strong>2. Pair the CLI and Developer App</strong><br>\n  This is where the magic happens. The CLI starts a tiny web server to serve your project. Then, the PhoneGap Developer App connects to that server.\n  <br><br>\n  First, use the CLI to serve your project:\n  <img src=\"" + gitResources + "/phonegap-pairing.png\"/>\n  <br>\n  Second, enter the server address into the PhoneGap Developer App. Please ignore the ip address given by phonegap serve. <strong>Only use <span class=\"link\">" + user + ".kd.io:3000</span></strong>\n</p>\n<p>\n  <strong>3. Get to Work</strong><br>\n  Once paired, it’s business as usual. You can freely add, edit, and remove files from your project. Every saved change will automatically update the preview displayed in the PhoneGap Developer App.\n  <img src=\"" + gitResources + "/phonegap-success.png\"/>\n</p>\n<div class=\"separator\">\n  Frequently Asked Questions\n</div>\n<p>\n  <strong>How come I don't see my terminal or the formatting is off?</strong><br>\n  This app has a resizing bug that is being looked into and will be fixed soon. \n  <br><br>\n  To fix formatting resize your browser window. Reload the page if the terminal or editor does not appear.\n</p>\n<br><br>\n<p>\n  <strong>How do I create or open a phonegap app?</strong><br>\n  The PhoneGap Developer app is compatible with existing PhoneGap and Apache Cordova projects.\n  <br><br>\n  You can create a new app:\n  <div class=\"code\">\n    $ phonegap create my-app\n    <br>\n    $ cd my-app/\n  </div>\n  <br>\n  Or open an existing app:\n  <div class=\"code\">\n    $ cd ~/PhoneGap/my-existing-app\n  </div>\n</p>\n<br><br>\n<p>\n  <strong>How do I create a phonegap server for testing?</strong><br>\n  Starting a phonegap server enables developers to test on multiple simultaneously.\n  <br><br>\n  Serve phonegap on port <strong>3000</strong>:\n  <div class=\"code\">\n    $ cd my-app/\n    <br>\n    $ phonegap serve\n  </div>\n  <br>\n  Or serve to a specific port\n  <div class=\"code\">\n    $ cd my-app/\n    <br>\n    $ phonegap serve --port &lt;port&gt;\n  </div>\n</p>"
         }));
         _this.workContainer.addSubView(_this.workEditor = new Workspace({
           title: "Text Editor",
@@ -654,7 +654,7 @@ PhonegapController = (function(_super) {
     return appView.addSubView(view);
   } else {
     return KD.registerAppClass(PhonegapController, {
-      name: "PhoneGap",
+      name: "Phonegap",
       routes: {
         "/:name?/Phonegap": null,
         "/:name?/bvallelunga/Apps/Phonegap": null

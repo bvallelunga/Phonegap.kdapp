@@ -126,7 +126,7 @@ class EditorView extends KDView
     options.cssClass = "editor-pane"
     super options, data
 
-    @storage = KD.singletons.localStorageController.storage "PhoneGap"
+    @storage = KD.singletons.localStorageController.storage "Phonegap"
     @createEditorInstance()
 
   createEditorInstance:->
@@ -218,7 +218,7 @@ class PhonegapMainView extends KDView
   
   user            = KD.nick()
   domain          = "#{user}.kd.io"
-  outPath         = "/tmp/_PhoneGapinstaller.out"
+  outPath         = "/tmp/_Phonegapinstaller.out"
   phoneGapBin     = "/usr/bin/phonegap"
   installerScript = "https://raw.githubusercontent.com/bvallelunga/Phonegap.kdapp/master/installer.sh"
   gitResources    = "https://raw.githubusercontent.com/bvallelunga/Phonegap.kdapp/master/resources"
@@ -569,7 +569,7 @@ do ->
   else
 
     KD.registerAppClass PhonegapController,
-      name     : "PhoneGap"
+      name     : "Phonegap"
       routes   :
         "/:name?/Phonegap" : null
         "/:name?/bvallelunga/Apps/Phonegap" : null
