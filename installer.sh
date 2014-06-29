@@ -1,5 +1,5 @@
 #!/bin/bash
-OUT="/tmp/_PhoneGapinstaller.out/$1"
+OUT="/tmp/_Phonegapinstaller.out/$1"
 mkdir -p $OUT
 
 #Install Node
