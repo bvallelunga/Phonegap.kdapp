@@ -1,4 +1,4 @@
-/* Compiled by kdc on Fri Jun 27 2014 20:04:23 GMT+0000 (UTC) */
+/* Compiled by kdc on Sun Jun 29 2014 09:15:01 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -521,13 +521,13 @@ PhonegapMainView = (function(_super) {
   PhonegapMainView.prototype.startWork = function() {
     var Terminal;
     Terminal = this.workTerminal.activePanel.panesByName.Terminal;
-    return Terminal.terminal.runCommand("cd ~/PhoneGap;");
+    return Terminal.terminal.runCommand("kill -9 $(lsof -i:3000 -t) 2> /dev/null;\ncd ~/PhoneGap;");
   };
 
   PhonegapMainView.prototype.startDemo = function() {
     var Terminal, finder;
     Terminal = this.workTerminal.activePanel.panesByName.Terminal;
-    Terminal.terminal.runCommand("cd ~/PhoneGap/hello; phonegap serve;");
+    Terminal.terminal.runCommand("kill -9 $(lsof -i:3000 -t) 2> /dev/null;\ncd ~/PhoneGap/hello;\nphonegap serve;");
     finder = this.workEditor.activePanel.panesByName.finder;
     return finder.loadFile("~/PhoneGap/hello/www/index.html");
   };

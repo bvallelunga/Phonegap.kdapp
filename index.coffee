@@ -458,11 +458,18 @@ class PhonegapMainView extends KDView
   
   startWork:->
     {Terminal} = @workTerminal.activePanel.panesByName
-    Terminal.terminal.runCommand "cd ~/PhoneGap;";
+    Terminal.terminal.runCommand """
+      kill -9 $(lsof -i:3000 -t) 2> /dev/null;
+      cd ~/PhoneGap;
+    """;
   
   startDemo:->
     {Terminal} = @workTerminal.activePanel.panesByName
-    Terminal.terminal.runCommand "cd ~/PhoneGap/hello; phonegap serve;";
+    Terminal.terminal.runCommand """
+      kill -9 $(lsof -i:3000 -t) 2> /dev/null;
+      cd ~/PhoneGap/hello;
+      phonegap serve;
+    """;
     
     {finder} = @workEditor.activePanel.panesByName
     finder.loadFile("~/PhoneGap/hello/www/index.html")
