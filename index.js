@@ -1,4 +1,4 @@
-/* Compiled by kdc on Sun Jun 29 2014 23:20:48 GMT+0000 (UTC) */
+/* Compiled by kdc on Sun Jun 29 2014 23:57:35 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -382,7 +382,7 @@ PhonegapMainView = (function(_super) {
       partial: "Please wait while your vm turns on..."
     }));
     this.loadingContainer.addSubView(this.loadingButton = new KDButtonView({
-      title: "Kill The Service and Continue",
+      title: "Kill The Service And Continue",
       cssClass: 'main-button solid hidden',
       loader: {
         color: "#FFFFFF",

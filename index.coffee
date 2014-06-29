@@ -245,7 +245,7 @@ class PhonegapMainView extends KDView
       partial    : "Please wait while your vm turns on..."
       
     @loadingContainer.addSubView @loadingButton = new KDButtonView
-      title         : "Kill The Service and Continue"
+      title         : "Kill The Service And Continue"
       cssClass      : 'main-button solid hidden'
       loader        :
         color       : "#FFFFFF"
