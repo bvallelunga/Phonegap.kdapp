@@ -20,6 +20,10 @@
   height: 50px;
 }
 
+.phonegap .loading-container div {
+  margin: 20px 0;
+}
+
 .phonegap .install-container {
   position: absolute;
   z-index: 2;
