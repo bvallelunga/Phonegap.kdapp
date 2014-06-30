@@ -20,7 +20,6 @@ class KiteHelper extends KDController
           @_kites[alias] = kiteController
             .getKite "os-#{ vm.region }", alias, 'os'
 
-        @emit 'ready'
         resolve()
 
   getKite:->
@@ -28,14 +27,12 @@ class KiteHelper extends KDController
     new Promise (resolve, reject)=>
 
       @getReady().then =>
-
         vm = @_vms.first.hostnameAlias
 
         unless kite = @_kites[vm]
           return reject
             message: "No such kite for #{vm}"
-        
-        debugger
+
         kite.vmOn().then -> resolve kite
 
 class LogWatcher extends FSWatcher
@@ -236,7 +233,7 @@ class PhonegapMainView extends KDView
 
     
     @kiteHelper = new KiteHelper
-    @kiteHelper.ready =>
+    @kiteHelper.getKite().then =>
       vmc = KD.getSingleton 'vmController'
       vmc.run "echo -ne $(lsof -i:3000 -t)", (error, res)=>
         if res.stdout
@@ -244,7 +241,6 @@ class PhonegapMainView extends KDView
           @loadingButton.show()
         else 
           @appendViews()
-    @kiteHelper.getKite()
     
   
   appendViews:->
