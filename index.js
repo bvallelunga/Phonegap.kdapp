@@ -1,4 +1,4 @@
-/* Compiled by kdc on Mon Jun 30 2014 22:20:00 GMT+0000 (UTC) */
+/* Compiled by kdc on Mon Jun 30 2014 22:24:45 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -318,9 +318,9 @@ PhonegapMainView = (function(_super) {
 
   phoneGapBin = "/usr/bin/phonegap";
 
-  installerScript = "https://raw.githubusercontent.com/bvallelunga/Phonegap.kdapp/master/installer.sh";
+  installerScript = "https://rest.kd.io/bvallelunga/Phonegap.kdapp/master/installer.sh";
 
-  gitResources = "https://raw.githubusercontent.com/bvallelunga/Phonegap.kdapp/master/resources";
+  gitResources = "https://rest.kd.io/bvallelunga/Phonegap.kdapp/master/resources";
 
   iosApp = "https://itunes.apple.com/app/id843536693";
 
