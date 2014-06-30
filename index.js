@@ -1,4 +1,4 @@
-/* Compiled by kdc on Mon Jun 30 2014 22:24:45 GMT+0000 (UTC) */
+/* Compiled by kdc on Mon Jun 30 2014 23:20:05 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -108,6 +108,7 @@ FinderView = (function(_super) {
     FinderView.__super__.constructor.call(this, options, data);
     vmController = KD.getSingleton("vmController");
     vmController.fetchDefaultVm(function(err, vm) {
+      vm.path = "/home/" + (KD.nick()) + "/PhoneGap";
       if (err) {
         warn(err);
       }

@@ -58,6 +58,8 @@ class FinderView extends KDView
     vmController = KD.getSingleton "vmController"
     vmController.fetchDefaultVm (err, vm) =>
       
+      vm.path = "/home/#{KD.nick()}/PhoneGap"
+      
       warn err  if err
       
       @finderController = new NFinderController {
