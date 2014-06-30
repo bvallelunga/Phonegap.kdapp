@@ -1,4 +1,4 @@
-/* Compiled by kdc on Sun Jun 29 2014 23:57:35 GMT+0000 (UTC) */
+/* Compiled by kdc on Mon Jun 30 2014 21:46:44 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -41,48 +41,21 @@ KiteHelper = (function(_super) {
     });
   };
 
-  KiteHelper.prototype.getVm = function() {
-    this._vm || (this._vm = this._vms.first);
-    return this._vm;
-  };
-
   KiteHelper.prototype.getKite = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
       return _this.getReady().then(function() {
         var kite, vm;
-        vm = _this.getVm().hostnameAlias;
+        vm = _this._vms.first.hostnameAlias;
         if (!(kite = _this._kites[vm])) {
           return reject({
             message: "No such kite for " + vm
           });
         }
+        debugger;
         return kite.vmOn().then(function() {
           return resolve(kite);
         });
-      });
-    });
-  };
-
-  KiteHelper.prototype.run = function(cmd, timeout, callback) {
-    var _ref1;
-    if (!callback) {
-      _ref1 = [callback, timeout], timeout = _ref1[0], callback = _ref1[1];
-    }
-    if (timeout == null) {
-      timeout = 10 * 60 * 1000;
-    }
-    return this.getKite().then(function(kite) {
-      kite.options.timeout = timeout;
-      return kite.exec({
-        command: cmd
-      }).then(function(result) {
-        return callback(null, result);
-      });
-    })["catch"](function(err) {
-      return callback({
-        message: "Failed to run " + cmd,
-        details: err
       });
     });
   };

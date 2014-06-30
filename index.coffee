@@ -23,40 +23,20 @@ class KiteHelper extends KDController
         @emit 'ready'
         resolve()
 
-  getVm:->
-    @_vm or= @_vms.first
-    return @_vm
-
   getKite:->
 
     new Promise (resolve, reject)=>
 
       @getReady().then =>
 
-        vm = @getVm().hostnameAlias
+        vm = @_vms.first.hostnameAlias
 
         unless kite = @_kites[vm]
           return reject
             message: "No such kite for #{vm}"
-
+        
+        debugger
         kite.vmOn().then -> resolve kite
-
-  run:(cmd, timeout, callback)->
-
-    unless callback
-      [timeout, callback] = [callback, timeout]
-
-    # Set it to 10 min if not given
-    timeout ?= 10 * 60 * 1000
-    @getKite().then (kite)->
-      kite.options.timeout = timeout
-      kite.exec(command: cmd)
-      .then (result)->
-        callback null, result
-    .catch (err)->
-      callback
-        message : "Failed to run #{cmd}"
-        details : err
 
 class LogWatcher extends FSWatcher
 
