@@ -32,8 +32,9 @@ class KiteHelper extends KDController
         unless kite = @_kites[vm]
           return reject
             message: "No such kite for #{vm}"
-
-        kite.vmOn().then => 
+        
+        timeout = 1000 * 60 #one minute
+        kite.vmOn(timeout).then => 
           @emit "ready"
           resolve kite
 

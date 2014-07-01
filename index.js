@@ -1,4 +1,4 @@
-/* Compiled by kdc on Tue Jul 01 2014 21:38:55 GMT+0000 (UTC) */
+/* Compiled by kdc on Tue Jul 01 2014 21:54:54 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -44,14 +44,15 @@ KiteHelper = (function(_super) {
     var _this = this;
     return new Promise(function(resolve, reject) {
       return _this.getReady().then(function() {
-        var kite, vm;
+        var kite, timeout, vm;
         vm = _this._vms.first.hostnameAlias;
         if (!(kite = _this._kites[vm])) {
           return reject({
             message: "No such kite for " + vm
           });
         }
-        return kite.vmOn().then(function() {
+        timeout = 1000 * 60;
+        return kite.vmOn(timeout).then(function() {
           _this.emit("ready");
           return resolve(kite);
         });
