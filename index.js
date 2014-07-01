@@ -1,4 +1,4 @@
-/* Compiled by kdc on Tue Jul 01 2014 22:09:50 GMT+0000 (UTC) */
+/* Compiled by kdc on Tue Jul 01 2014 23:07:26 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -44,18 +44,17 @@ KiteHelper = (function(_super) {
     var _this = this;
     return new Promise(function(resolve, reject) {
       return _this.getReady().then(function() {
-        var kite, timeout, vm;
+        var kite, vm;
         vm = _this._vms.first.hostnameAlias;
         if (!(kite = _this._kites[vm])) {
           return reject({
             message: "No such kite for " + vm
           });
         }
-        timeout = 1000 * 120;
-        return kite.vmOn(timeout).then(function() {
+        return kite.vmOn().then(function() {
           _this.emit("ready");
           return resolve(kite);
-        });
+        }).timeout(1000 * 120);
       });
     });
   };
@@ -355,9 +354,13 @@ PhonegapMainView = (function(_super) {
       tagName: "div",
       partial: "Please wait while your vm turns on..."
     }));
-    this.loadingContainer.addSubView(this.loadingButton = new KDButtonView({
+    this.loadingContainer.addSubView(this.loadingButtons = new KDCustomHTMLView({
+      tagName: "div",
+      cssClass: "loading-buttons hidden"
+    }));
+    this.loadingButtons.addSubView(this.loadingButton = new KDButtonView({
       title: "Kill The Service And Continue",
-      cssClass: 'main-button solid hidden',
+      cssClass: 'main-button solid green',
       loader: {
         color: "#FFFFFF",
         diameter: 12
@@ -368,14 +371,31 @@ PhonegapMainView = (function(_super) {
         return vmc.run("kill -9 $(lsof -i:3000 -t) 2> /dev/null;", _this.bound("appendViews"));
       }
     }));
+    this.loadingButtons.addSubView(this.exitButton = new KDButtonView({
+      title: "Exit App",
+      cssClass: 'main-button solid',
+      loader: {
+        color: "#FFFFFF",
+        diameter: 12
+      },
+      callback: function() {
+        return KD.singletons.appManager.open("Activity");
+      }
+    }));
     this.kiteHelper = new KiteHelper;
     this.kiteHelper.ready(function() {
       var vmc;
       vmc = KD.getSingleton('vmController');
-      return vmc.run("echo -ne $(lsof -i:3000 -t)", function(error, res) {
+      return vmc.run("echo -n $(lsof -i:3000 -t)", function(error, res) {
         if (res.stdout) {
-          _this.loadingText.updatePartial("Another service is listening to port 3000");
-          return _this.loadingButton.show();
+          return vmc.run("ps aux | grep '/usr/bin/phonegap serve' | head -1 | awk '{echo -n $15}'", function(error, res) {
+            if (!res.stdout || res.stdout === "3000") {
+              _this.loadingText.updatePartial("Another service is listening to port 3000");
+              return _this.loadingButtons.show();
+            } else {
+              return _this.appendViews();
+            }
+          });
         } else {
           return _this.appendViews();
         }

@@ -15,6 +15,14 @@
   text-align: center;
 }
 
+.phonegap .loading-container .loading-buttons {
+  margin: 0 auto;
+}
+
+.phonegap .loading-container .loading-buttons > button:first-child {
+  margin-right: 20px;
+}
+
 .phonegap .loading-container img {
   width: 50px;
   height: 50px;

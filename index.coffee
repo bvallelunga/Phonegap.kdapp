@@ -33,10 +33,10 @@ class KiteHelper extends KDController
           return reject
             message: "No such kite for #{vm}"
         
-        timeout = 1000 * 120 #two minutes
-        kite.vmOn(timeout).then => 
+        kite.vmOn().then => 
           @emit "ready"
           resolve kite
+        .timeout 1000 * 120 #two minutes
 
 class LogWatcher extends FSWatcher
 
@@ -226,24 +226,43 @@ class PhonegapMainView extends KDView
       tagName    : "div"
       partial    : "Please wait while your vm turns on..."
       
-    @loadingContainer.addSubView @loadingButton = new KDButtonView
+    @loadingContainer.addSubView @loadingButtons = new KDCustomHTMLView
+      tagName    : "div"
+      cssClass   : "loading-buttons hidden"
+    
+    @loadingButtons.addSubView @loadingButton = new KDButtonView
       title         : "Kill The Service And Continue"
-      cssClass      : 'main-button solid hidden'
+      cssClass      : 'main-button solid green'
       loader        :
         color       : "#FFFFFF"
         diameter    : 12
       callback      : =>
         vmc = KD.getSingleton 'vmController'
         vmc.run "kill -9 $(lsof -i:3000 -t) 2> /dev/null;", @bound "appendViews"
+        
+    @loadingButtons.addSubView @exitButton = new KDButtonView
+      title         : "Exit App"
+      cssClass      : 'main-button solid'
+      loader        :
+        color       : "#FFFFFF"
+        diameter    : 12
+      callback      : =>
+        KD.singletons.appManager.open "Activity"
 
     
     @kiteHelper = new KiteHelper
     @kiteHelper.ready =>
       vmc = KD.getSingleton 'vmController'
-      vmc.run "echo -ne $(lsof -i:3000 -t)", (error, res)=>
+      vmc.run "echo -n $(lsof -i:3000 -t)", (error, res)=>
         if res.stdout
-          @loadingText.updatePartial "Another service is listening to port 3000"
-          @loadingButton.show()
+          vmc.run """
+            ps aux | grep '/usr/bin/phonegap serve' | head -1 | awk '{echo -n $15}'
+          """ , (error, res)=>
+            if not res.stdout or res.stdout is "3000"
+              @loadingText.updatePartial "Another service is listening to port 3000"
+              @loadingButtons.show()
+            else
+              @appendViews()
         else 
           @appendViews()
     
