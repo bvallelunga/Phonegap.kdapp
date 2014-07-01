@@ -247,7 +247,7 @@ class PhonegapMainView extends KDView
         color       : "#FFFFFF"
         diameter    : 12
       callback      : =>
-        KD.singletons.appManager.open "Activity"
+        window.location.href = "/Apps"
 
     
     @kiteHelper = new KiteHelper

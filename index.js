@@ -1,4 +1,4 @@
-/* Compiled by kdc on Tue Jul 01 2014 23:07:26 GMT+0000 (UTC) */
+/* Compiled by kdc on Tue Jul 01 2014 23:35:04 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -379,7 +379,7 @@ PhonegapMainView = (function(_super) {
         diameter: 12
       },
       callback: function() {
-        return KD.singletons.appManager.open("Activity");
+        return window.location.href = "/Apps";
       }
     }));
     this.kiteHelper = new KiteHelper;
