@@ -33,7 +33,9 @@ class KiteHelper extends KDController
           return reject
             message: "No such kite for #{vm}"
 
-        kite.vmOn().then -> resolve kite
+        kite.vmOn().then => 
+          @emit "ready"
+          resolve kite
 
 class LogWatcher extends FSWatcher
 
@@ -235,7 +237,7 @@ class PhonegapMainView extends KDView
 
     
     @kiteHelper = new KiteHelper
-    @kiteHelper.getKite().then =>
+    @kiteHelper.ready =>
       vmc = KD.getSingleton 'vmController'
       vmc.run "echo -ne $(lsof -i:3000 -t)", (error, res)=>
         if res.stdout
@@ -243,6 +245,8 @@ class PhonegapMainView extends KDView
           @loadingButton.show()
         else 
           @appendViews()
+    
+    @kiteHelper.getKite()
     
   
   appendViews:->
