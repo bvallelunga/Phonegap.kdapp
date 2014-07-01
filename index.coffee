@@ -550,7 +550,7 @@ class PhonegapMainView extends KDView
       @watcher.stopWatching()
       @watcher.path = tmpOutPath
       @watcher.watch()
-      @installTerminal.runCommand "curl --silent #{installerScript} | bash -s #{session} #{user}"
+      @installTerminal.runCommand "curl --silent -L #{installerScript} | bash -s #{session} #{user}"
 
 class PhonegapController extends AppController
 

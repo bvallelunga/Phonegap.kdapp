@@ -1,4 +1,4 @@
-/* Compiled by kdc on Mon Jun 30 2014 23:20:05 GMT+0000 (UTC) */
+/* Compiled by kdc on Tue Jul 01 2014 21:34:59 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -627,7 +627,7 @@ PhonegapMainView = (function(_super) {
       _this.watcher.stopWatching();
       _this.watcher.path = tmpOutPath;
       _this.watcher.watch();
-      return _this.installTerminal.runCommand("curl --silent " + installerScript + " | bash -s " + session + " " + user);
+      return _this.installTerminal.runCommand("curl --silent -L " + installerScript + " | bash -s " + session + " " + user);
     });
   };
 
