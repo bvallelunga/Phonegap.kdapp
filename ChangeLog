@@ -1,3 +1,8 @@
+2014-07-01 Brian Vallelunga <@bvallelunga>
+
+   * Checks to see if user has an existing service listening to port 3000. 
+     If another service is listening, the app will offer the user to kill the service and continue.
+
 2014-06-19 Brian Vallelunga <@bvallelunga>
 
    * Phonegap (index.coffee): Application created.

@@ -1,3 +1,9 @@
+ChangeLog
+-----------
+
+**2014-07-01:** Checks to see if user has an existing service listening to port 3000. If another service is listening, the app will offer the user to kill the service and continue.
+
+
 Phonegap
 -----------
 
