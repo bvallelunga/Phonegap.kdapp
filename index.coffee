@@ -236,9 +236,7 @@ class PhonegapMainView extends KDView
       loader        :
         color       : "#FFFFFF"
         diameter    : 12
-      callback      : =>
-        vmc = KD.getSingleton 'vmController'
-        vmc.run "kill -9 $(lsof -i:3000 -t) 2> /dev/null;", @bound "appendViews"
+      callback      : @killExistingService
         
     @loadingButtons.addSubView @exitButton = new KDButtonView
       title         : "Exit App"
@@ -256,20 +254,31 @@ class PhonegapMainView extends KDView
       vmc.run "echo -n $(lsof -i:3000 -t)", (error, res)=>
         if res.stdout
           vmc.run """
-            ps aux | grep '/usr/bin/phonegap serve' | head -1 | awk '{echo -n $15}'
+            ps aux | grep '#{res.stdout}' | head -1 | awk '{print $12} {print $15}'
           """ , (error, res)=>
-            if not res.stdout or res.stdout is "3000"
+            outputSplit = res.stdout.split "\n"
+          
+            if outputSplit[0] is "/usr/bin/phonegap"
+              #if no port or port 3000
+              if not outputSplit[2] or "3000" in outputSplit
+                @killExistingService()
+              else 
+                @loadingText.updatePartial "Another service is listening to port 3000"
+                @loadingButtons.show()
+
+            else 
               @loadingText.updatePartial "Another service is listening to port 3000"
               @loadingButtons.show()
-            else
-              @appendViews()
         else 
           @appendViews()
     
     @kiteHelper.getKite()
-    
   
-  appendViews:->
+  killExistingService:=>
+    vmc = KD.getSingleton 'vmController'
+    vmc.run "kill -9 $(lsof -i:3000 -t) 2> /dev/null;", @bound "appendViews"
+  
+  appendViews:=>
     KD.singletons.appManager.require 'Teamwork', =>
       #Work Container
       @addSubView @workContainer = new KDCustomHTMLView
@@ -494,7 +503,6 @@ class PhonegapMainView extends KDView
     
     {finder} = @workEditor.activePanel.panesByName
     finder.loadFile("~/PhoneGap/hello/www/index.html")
-    
   
   checkState:->
     vmc = KD.getSingleton 'vmController'
