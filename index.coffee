@@ -236,7 +236,7 @@ class PhonegapMainView extends KDView
       loader        :
         color       : "#FFFFFF"
         diameter    : 12
-      callback      : @killExistingService
+      callback      : @bound "killExistingService"
         
     @loadingButtons.addSubView @exitButton = new KDButtonView
       title         : "Exit App"
@@ -277,7 +277,7 @@ class PhonegapMainView extends KDView
   
   killExistingService:->
     vmc = KD.getSingleton 'vmController'
-    vmc.run "kill -9 $(lsof -i:3000 -t) 2> /dev/null;", @bound "appendViews"
+    vmc.run "kill -9 $(lsof -i:3000 -t) 2> /dev/null;", @appendViews
   
   appendViews:->
     KD.singletons.appManager.require 'Teamwork', =>

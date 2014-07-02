@@ -1,4 +1,4 @@
-/* Compiled by kdc on Wed Jul 02 2014 01:47:27 GMT+0000 (UTC) */
+/* Compiled by kdc on Wed Jul 02 2014 09:45:47 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -366,7 +366,7 @@ PhonegapMainView = (function(_super) {
         color: "#FFFFFF",
         diameter: 12
       },
-      callback: this.killExistingService
+      callback: this.bound("killExistingService")
     }));
     this.loadingButtons.addSubView(this.exitButton = new KDButtonView({
       title: "Exit App",
@@ -411,7 +411,7 @@ PhonegapMainView = (function(_super) {
   PhonegapMainView.prototype.killExistingService = function() {
     var vmc;
     vmc = KD.getSingleton('vmController');
-    return vmc.run("kill -9 $(lsof -i:3000 -t) 2> /dev/null;", this.bound("appendViews"));
+    return vmc.run("kill -9 $(lsof -i:3000 -t) 2> /dev/null;", this.appendViews);
   };
 
   PhonegapMainView.prototype.appendViews = function() {
