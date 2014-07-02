@@ -259,6 +259,7 @@ class PhonegapMainView extends KDView
             outputSplit = res.stdout.split "\n"
           
             if outputSplit[0] is "/usr/bin/phonegap"
+              
               #if no port or port 3000
               if not outputSplit[2] or "3000" in outputSplit
                 @killExistingService()
@@ -274,11 +275,11 @@ class PhonegapMainView extends KDView
     
     @kiteHelper.getKite()
   
-  killExistingService:=>
+  killExistingService:->
     vmc = KD.getSingleton 'vmController'
     vmc.run "kill -9 $(lsof -i:3000 -t) 2> /dev/null;", @bound "appendViews"
   
-  appendViews:=>
+  appendViews:->
     KD.singletons.appManager.require 'Teamwork', =>
       #Work Container
       @addSubView @workContainer = new KDCustomHTMLView

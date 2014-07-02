@@ -1,10 +1,11 @@
-/* Compiled by kdc on Tue Jul 01 2014 23:43:33 GMT+0000 (UTC) */
+/* Compiled by kdc on Wed Jul 02 2014 01:47:27 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
 var EditorView, FinderView, KiteHelper, LogWatcher, PhonegapController, PhonegapMainView, TerminalView, _ref, _ref1,
   __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 KiteHelper = (function(_super) {
   __extends(KiteHelper, _super);
@@ -365,11 +366,7 @@ PhonegapMainView = (function(_super) {
         color: "#FFFFFF",
         diameter: 12
       },
-      callback: function() {
-        var vmc;
-        vmc = KD.getSingleton('vmController');
-        return vmc.run("kill -9 $(lsof -i:3000 -t) 2> /dev/null;", _this.bound("appendViews"));
-      }
+      callback: this.killExistingService
     }));
     this.loadingButtons.addSubView(this.exitButton = new KDButtonView({
       title: "Exit App",
@@ -388,12 +385,19 @@ PhonegapMainView = (function(_super) {
       vmc = KD.getSingleton('vmController');
       return vmc.run("echo -n $(lsof -i:3000 -t)", function(error, res) {
         if (res.stdout) {
-          return vmc.run("ps aux | grep '/usr/bin/phonegap serve' | head -1 | awk '{echo -n $15}'", function(error, res) {
-            if (!res.stdout || res.stdout === "3000") {
+          return vmc.run("ps aux | grep '" + res.stdout + "' | head -1 | awk '{print $12} {print $15}'", function(error, res) {
+            var outputSplit;
+            outputSplit = res.stdout.split("\n");
+            if (outputSplit[0] === "/usr/bin/phonegap") {
+              if (!outputSplit[2] || __indexOf.call(outputSplit, "3000") >= 0) {
+                return _this.killExistingService();
+              } else {
+                _this.loadingText.updatePartial("Another service is listening to port 3000");
+                return _this.loadingButtons.show();
+              }
+            } else {
               _this.loadingText.updatePartial("Another service is listening to port 3000");
               return _this.loadingButtons.show();
-            } else {
-              return _this.appendViews();
             }
           });
         } else {
@@ -402,6 +406,12 @@ PhonegapMainView = (function(_super) {
       });
     });
     return this.kiteHelper.getKite();
+  };
+
+  PhonegapMainView.prototype.killExistingService = function() {
+    var vmc;
+    vmc = KD.getSingleton('vmController');
+    return vmc.run("kill -9 $(lsof -i:3000 -t) 2> /dev/null;", this.bound("appendViews"));
   };
 
   PhonegapMainView.prototype.appendViews = function() {
