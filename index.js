@@ -1,4 +1,4 @@
-/* Compiled by kdc on Wed Jul 02 2014 09:45:47 GMT+0000 (UTC) */
+/* Compiled by kdc on Wed Jul 02 2014 19:08:21 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -53,8 +53,8 @@ KiteHelper = (function(_super) {
           });
         }
         return kite.vmOn().then(function() {
-          _this.emit("ready");
-          return resolve(kite);
+          resolve(kite);
+          return console.log(1);
         }).timeout(1000 * 120);
       });
     });
@@ -380,8 +380,9 @@ PhonegapMainView = (function(_super) {
       }
     }));
     this.kiteHelper = new KiteHelper;
-    this.kiteHelper.ready(function() {
+    return this.kiteHelper.getKite().then(function(kite) {
       var vmc;
+      console.log(2);
       vmc = KD.getSingleton('vmController');
       return vmc.run("echo -n $(lsof -i:3000 -t)", function(error, res) {
         if (res.stdout) {
@@ -401,11 +402,11 @@ PhonegapMainView = (function(_super) {
             }
           });
         } else {
-          return _this.appendViews();
+          _this.appendViews();
+          return console.log(3);
         }
       });
     });
-    return this.kiteHelper.getKite();
   };
 
   PhonegapMainView.prototype.killExistingService = function() {
