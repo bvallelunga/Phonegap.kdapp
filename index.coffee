@@ -36,6 +36,8 @@ class KiteHelper extends KDController
         kite.vmOn().then => 
           resolve kite
         .timeout 1000 * 120 #two minutes
+        .catch (err)->
+          reject err
 
 class LogWatcher extends FSWatcher
 
@@ -227,7 +229,7 @@ class PhonegapMainView extends KDView
       
     @loadingContainer.addSubView @loadingButtons = new KDCustomHTMLView
       tagName    : "div"
-      cssClass   : "loading-buttons hidden"
+      cssClass   : "buttons hidden"
     
     @loadingButtons.addSubView @loadingButton = new KDButtonView
       title         : "Kill The Service And Continue"
@@ -244,6 +246,28 @@ class PhonegapMainView extends KDView
         color       : "#FFFFFF"
         diameter    : 12
       callback      : =>
+        KD.singletons.router.handleRoute "/Apps"
+        
+    @loadingContainer.addSubView @errorButtons = new KDCustomHTMLView
+      tagName    : "div"
+      cssClass   : "buttons hidden"
+    
+    @errorButtons.addSubView @loadingButton = new KDButtonView
+      title         : "Reload Page"
+      cssClass      : 'main-button solid green'
+      loader        :
+        color       : "#FFFFFF"
+        diameter    : 12
+      callback      : ->
+        window.location.reload()
+        
+    @errorButtons.addSubView @exitButton = new KDButtonView
+      title         : "Exit App"
+      cssClass      : 'main-button solid'
+      loader        :
+        color       : "#FFFFFF"
+        diameter    : 12
+      callback      : ->
         KD.singletons.router.handleRoute "/Apps"
 
     
@@ -271,7 +295,11 @@ class PhonegapMainView extends KDView
               @loadingButtons.show()
         else 
           @appendViews()
-  
+    
+    .catch (err)=>
+      @loadingText.updatePartial err.message
+      @errorButtons.show()
+    
   killExistingService:->
     vmc = KD.getSingleton 'vmController'
     vmc.run "kill -9 $(lsof -i:3000 -t) 2> /dev/null;", @appendViews

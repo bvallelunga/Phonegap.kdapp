@@ -1,4 +1,4 @@
-/* Compiled by kdc on Wed Jul 02 2014 19:15:24 GMT+0000 (UTC) */
+/* Compiled by kdc on Wed Jul 02 2014 19:31:22 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -54,7 +54,9 @@ KiteHelper = (function(_super) {
         }
         return kite.vmOn().then(function() {
           return resolve(kite);
-        }).timeout(1000 * 120);
+        }).timeout(1000 * 120.["catch"](function(err) {
+          return reject(err);
+        }));
       });
     });
   };
@@ -356,7 +358,7 @@ PhonegapMainView = (function(_super) {
     }));
     this.loadingContainer.addSubView(this.loadingButtons = new KDCustomHTMLView({
       tagName: "div",
-      cssClass: "loading-buttons hidden"
+      cssClass: "buttons hidden"
     }));
     this.loadingButtons.addSubView(this.loadingButton = new KDButtonView({
       title: "Kill The Service And Continue",
@@ -368,6 +370,32 @@ PhonegapMainView = (function(_super) {
       callback: this.bound("killExistingService")
     }));
     this.loadingButtons.addSubView(this.exitButton = new KDButtonView({
+      title: "Exit App",
+      cssClass: 'main-button solid',
+      loader: {
+        color: "#FFFFFF",
+        diameter: 12
+      },
+      callback: function() {
+        return KD.singletons.router.handleRoute("/Apps");
+      }
+    }));
+    this.loadingContainer.addSubView(this.errorButtons = new KDCustomHTMLView({
+      tagName: "div",
+      cssClass: "buttons hidden"
+    }));
+    this.errorButtons.addSubView(this.loadingButton = new KDButtonView({
+      title: "Reload Page",
+      cssClass: 'main-button solid green',
+      loader: {
+        color: "#FFFFFF",
+        diameter: 12
+      },
+      callback: function() {
+        return window.location.reload();
+      }
+    }));
+    this.errorButtons.addSubView(this.exitButton = new KDButtonView({
       title: "Exit App",
       cssClass: 'main-button solid',
       loader: {
@@ -403,6 +431,9 @@ PhonegapMainView = (function(_super) {
           return _this.appendViews();
         }
       });
+    })["catch"](function(err) {
+      _this.loadingText.updatePartial(err.message);
+      return _this.errorButtons.show();
     });
   };
 
