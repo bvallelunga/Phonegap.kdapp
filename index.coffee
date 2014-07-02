@@ -33,10 +33,10 @@ class KiteHelper extends KDController
           return reject
             message: "No such kite for #{vm}"
         
-        kite.vmOn().then => 
+        kite.vmOn().then -> 
           resolve kite
-        .timeout 1000 * 120 #two minutes
-        .catch (err)->
+        .timeout(1000 * 120)
+        .catch Error, (err) ->
           reject err
 
 class LogWatcher extends FSWatcher
