@@ -593,17 +593,6 @@ class PhonegapMainView extends KDView
         @installButton.hideLoader()
         @switchState 'demo'
       
-      else if percentage is "40"
-        @installTerminal.unsetClass 'in'
-        @installToggle.setState 'Show details'
-        @installToggle.unsetClass 'toggle'
-        
-      else if percentage is "20"
-        @installTerminal.setClass 'in'
-        @installTerminal.webterm.setKeyView()
-        @installToggle.setState 'Hide details'
-        @installToggle.setClass 'toggle'
-      
       else if percentage is "0"
         @installTerminal.unsetClass 'in'
         @installToggle.setState 'Show details'
@@ -616,7 +605,12 @@ class PhonegapMainView extends KDView
       @watcher.stopWatching()
       @watcher.path = tmpOutPath
       @watcher.watch()
-      @installTerminal.runCommand "curl --silent -L #{installerScript} | bash -s #{session} #{user}"
+      
+      @installTerminal.setClass 'in'
+      @installTerminal.webterm.setKeyView()
+      @installToggle.setState 'Hide details'
+      @installToggle.setClass 'toggle'
+      @installTerminal.runCommand "curl --silent -L #{installerScript} | sudo bash -s #{session} #{user}"
 
 class PhonegapController extends AppController
 

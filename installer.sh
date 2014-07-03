@@ -1,22 +1,19 @@
 #!/bin/bash
 OUT="/tmp/_Phonegapinstaller.out/$1"
 mkdir -p $OUT
-
-#Gains sudo access so the password isn't asked multiple times
-touch $OUT/"20-Asking for sudo password"
-sudo echo "Starting Installer"
+touch $OUT/"0-Starting Install"
 
 #Install Node
 if [ ! -d "/usr/bin/node" ]; then
-  touch $OUT/"40-Installing Node.js"
-  sudo apt-add-repository -y ppa:chris-lea/node.js > /dev/null
-  sudo apt-get update > /dev/null
-  sudo apt-get install -y nodejs > /dev/null
+  touch $OUT/"30-Installing Node.js"
+  apt-add-repository -y ppa:chris-lea/node.js > /dev/null
+  apt-get update > /dev/null
+  apt-get install -y nodejs > /dev/null
 fi
 
 #Install Phonegap
-touch $OUT/"60-Asking for sudo password"
-sudo npm install -g phonegap --silent
+touch $OUT/"60-Installing PhoneGap CLI"
+npm install -g phonegap --silent
 
 #Create PhoneGap folder
 mkdir -p ~/PhoneGap
@@ -25,7 +22,7 @@ mkdir -p ~/PhoneGap
 if [ ! -d "~/PhoneGap/hello" ]; then
 
   #Create Demo Project
-  touch $OUT/"80-Creating PhoneGap Project"
+  touch $OUT/"90-Creating PhoneGap Project"
   /usr/bin/phonegap create ~/PhoneGap/hello com.$2.hello HelloWorld
 
 fi

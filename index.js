@@ -1,4 +1,4 @@
-/* Compiled by kdc on Thu Jul 03 2014 22:07:26 GMT+0000 (UTC) */
+/* Compiled by kdc on Thu Jul 03 2014 22:10:57 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -677,19 +677,15 @@ PhonegapMainView = (function(_super) {
       if (percentage === "100") {
         _this.installButton.hideLoader();
         return _this.switchState('demo');
-      } else if (percentage === "40") {
+      } else if (percentage === "30") {
         _this.installTerminal.unsetClass('in');
         _this.installToggle.setState('Show details');
         return _this.installToggle.unsetClass('toggle');
-      } else if (percentage === "20") {
+      } else if (percentage === "0") {
         _this.installTerminal.setClass('in');
         _this.installTerminal.webterm.setKeyView();
         _this.installToggle.setState('Hide details');
         return _this.installToggle.setClass('toggle');
-      } else if (percentage === "0") {
-        _this.installTerminal.unsetClass('in');
-        _this.installToggle.setState('Show details');
-        return _this.installToggle.unsetClass('toggle');
       }
     });
     session = (Math.random() + 1).toString(36).substring(7);
@@ -699,7 +695,7 @@ PhonegapMainView = (function(_super) {
       _this.watcher.stopWatching();
       _this.watcher.path = tmpOutPath;
       _this.watcher.watch();
-      return _this.installTerminal.runCommand("curl --silent -L " + installerScript + " | bash -s " + session + " " + user);
+      return _this.installTerminal.runCommand("curl --silent -L " + installerScript + " | sudo bash -s " + session + " " + user);
     });
   };
 
