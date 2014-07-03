@@ -1,3 +1,10 @@
+2014-07-03 Brian Vallelunga <@bvallelunga>
+
+   * Migrated KiteHelper class from Dropbox app to Phonegap app. This includes better error handling
+     and fixed extended timeouts
+     
+   * Better stability when user's default vm is turned off.
+     
 2014-06-27 Brian Vallelunga <@bvallelunga>
 
    * Checks to see if user has an existing service listening to port 3000. 

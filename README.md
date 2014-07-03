@@ -1,5 +1,9 @@
 ChangeLog
 -----------
+
+**2014-07-03:** Migrated KiteHelper class from Dropbox app to Phonegap app. This includes better error handling
+     and fixed extended timeouts
+
 **2014-07-03:** Better stability when user's default vm is turned off.
 
 **2014-06-27:** Checks to see if user has an existing service listening to port 3000. If another service is listening, the app will offer the user to kill the service and continue.
