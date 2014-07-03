@@ -4,6 +4,8 @@
      and fixed extended timeouts
      
    * Better stability when user's default vm is turned off.
+   
+   * Made phonegap is install less verbose
      
 2014-06-27 Brian Vallelunga <@bvallelunga>
 
