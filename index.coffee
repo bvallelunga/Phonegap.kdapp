@@ -591,17 +591,14 @@ class PhonegapMainView extends KDView
       
       if percentage is "100"
         @installButton.hideLoader()
-        @installTerminal.unsetClass 'in'
-        @installToggle.setState 'Show details'
-        @installToggle.unsetClass 'toggle'
         @switchState 'demo'
       
-      else if percentage is "80"
+      else if percentage is "40"
         @installTerminal.unsetClass 'in'
         @installToggle.setState 'Show details'
         @installToggle.unsetClass 'toggle'
         
-      else if percentage is "40"
+      else if percentage is "20"
         @installTerminal.setClass 'in'
         @installTerminal.webterm.setKeyView()
         @installToggle.setState 'Hide details'

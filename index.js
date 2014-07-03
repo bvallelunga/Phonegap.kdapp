@@ -1,4 +1,4 @@
-/* Compiled by kdc on Thu Jul 03 2014 21:46:02 GMT+0000 (UTC) */
+/* Compiled by kdc on Thu Jul 03 2014 22:07:26 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -676,15 +676,12 @@ PhonegapMainView = (function(_super) {
       _this.installProgress.updateBar(percentage, '%', status);
       if (percentage === "100") {
         _this.installButton.hideLoader();
-        _this.installTerminal.unsetClass('in');
-        _this.installToggle.setState('Show details');
-        _this.installToggle.unsetClass('toggle');
         return _this.switchState('demo');
-      } else if (percentage === "80") {
+      } else if (percentage === "40") {
         _this.installTerminal.unsetClass('in');
         _this.installToggle.setState('Show details');
         return _this.installToggle.unsetClass('toggle');
-      } else if (percentage === "40") {
+      } else if (percentage === "20") {
         _this.installTerminal.setClass('in');
         _this.installTerminal.webterm.setKeyView();
         _this.installToggle.setState('Hide details');
