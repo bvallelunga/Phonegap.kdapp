@@ -1,30 +1,28 @@
 class KiteHelper extends KDController
 
+  mvIsStarting: false
+  
   getReady:->
 
     new Promise (resolve, reject) =>
-      
-      if KD.useNewKites
-        KD.toggleKiteStack()
-        reject()
-      else
-        {JVM} = KD.remote.api
-        JVM.fetchVmsByContext (err, vms)=>
-  
-          console.warn err  if err
-          return unless vms
-  
-          @_vms = vms
-          @_kites = {}
-  
-          kiteController = KD.getSingleton 'kiteController'
-  
-          for vm in vms
-            alias = vm.hostnameAlias
-            @_kites[alias] = kiteController
-              .getKite "os-#{ vm.region }", alias, 'os'
-          
-          resolve()
+
+      {JVM} = KD.remote.api
+      JVM.fetchVmsByContext (err, vms)=>
+
+        console.warn err  if err
+        return unless vms
+
+        @_vms = vms
+        @_kites = {}
+
+        kiteController = KD.getSingleton 'kiteController'
+
+        for vm in vms
+          alias = vm.hostnameAlias
+          @_kites[alias] = kiteController
+            .getKite "os-#{ vm.region }", alias, 'os'
+        
+        resolve()
 
   getKite:->
 
@@ -38,13 +36,16 @@ class KiteHelper extends KDController
           return reject
             message: "No such kite for #{vm}"
         
-        vmController.info vm, (err, vmn, info)->
-          if info.state is "STOPPED"
-            kite.vmOn().then -> 
-              KD.utils.wait 2000, ->
-                resolve kite
-            .timeout(1000 * 60)
-            .catch Error, (err) ->
+        vmController.info vm, (err, vmn, info)=>
+          if !@mvIsStarting and info.state is "STOPPED"
+            @mvIsStarting = true
+            timeout = 10 * 60 * 1000
+            kite.options.timeout = timeout
+            
+            kite.vmOn().then ->
+              resolve kite
+            .timeout(timeout)
+            .catch (err)->
               reject err
           else
             resolve kite

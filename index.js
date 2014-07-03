@@ -1,4 +1,4 @@
-/* Compiled by kdc on Thu Jul 03 2014 08:50:46 GMT+0000 (UTC) */
+/* Compiled by kdc on Thu Jul 03 2014 21:40:04 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -15,34 +15,31 @@ KiteHelper = (function(_super) {
     return _ref;
   }
 
+  KiteHelper.prototype.mvIsStarting = false;
+
   KiteHelper.prototype.getReady = function() {
     var _this = this;
     return new Promise(function(resolve, reject) {
       var JVM;
-      if (KD.useNewKites) {
-        KD.toggleKiteStack();
-        return reject();
-      } else {
-        JVM = KD.remote.api.JVM;
-        return JVM.fetchVmsByContext(function(err, vms) {
-          var alias, kiteController, vm, _i, _len;
-          if (err) {
-            console.warn(err);
-          }
-          if (!vms) {
-            return;
-          }
-          _this._vms = vms;
-          _this._kites = {};
-          kiteController = KD.getSingleton('kiteController');
-          for (_i = 0, _len = vms.length; _i < _len; _i++) {
-            vm = vms[_i];
-            alias = vm.hostnameAlias;
-            _this._kites[alias] = kiteController.getKite("os-" + vm.region, alias, 'os');
-          }
-          return resolve();
-        });
-      }
+      JVM = KD.remote.api.JVM;
+      return JVM.fetchVmsByContext(function(err, vms) {
+        var alias, kiteController, vm, _i, _len;
+        if (err) {
+          console.warn(err);
+        }
+        if (!vms) {
+          return;
+        }
+        _this._vms = vms;
+        _this._kites = {};
+        kiteController = KD.getSingleton('kiteController');
+        for (_i = 0, _len = vms.length; _i < _len; _i++) {
+          vm = vms[_i];
+          alias = vm.hostnameAlias;
+          _this._kites[alias] = kiteController.getKite("os-" + vm.region, alias, 'os');
+        }
+        return resolve();
+      });
     });
   };
 
@@ -59,12 +56,14 @@ KiteHelper = (function(_super) {
           });
         }
         return vmController.info(vm, function(err, vmn, info) {
-          if (info.state === "STOPPED") {
+          var timeout;
+          if (!_this.mvIsStarting && info.state === "STOPPED") {
+            _this.mvIsStarting = true;
+            timeout = 10 * 60 * 1000;
+            kite.options.timeout = timeout;
             return kite.vmOn().then(function() {
-              return KD.utils.wait(2000, function() {
-                return resolve(kite);
-              });
-            }).timeout(1000 * 60)["catch"](Error, function(err) {
+              return resolve(kite);
+            }).timeout(timeout)["catch"](function(err) {
               return reject(err);
             });
           } else {
