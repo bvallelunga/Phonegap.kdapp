@@ -28,16 +28,17 @@ class KiteHelper extends KDController
 
       @getReady().then =>
         vm = @_vms.first.hostnameAlias
+        {vmController} = KD.singletons
 
         unless kite = @_kites[vm]
           return reject
             message: "No such kite for #{vm}"
         
-        kite.vmInfo().then (info)->
-          if info.state != "RUNNING"
+        vmController.info vm, (err, vmn, info)->
+          if info.state is "STOPPED"
             kite.vmOn().then -> 
               resolve kite
-            .timeout(1000 * 120)
+            .timeout(1000 * 60)
             .catch Error, (err) ->
               reject err
           else
