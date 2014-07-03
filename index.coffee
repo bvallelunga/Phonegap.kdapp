@@ -19,7 +19,7 @@ class KiteHelper extends KDController
           alias = vm.hostnameAlias
           @_kites[alias] = kiteController
             .getKite "os-#{ vm.region }", alias, 'os'
-
+        
         resolve()
 
   getKite:->
@@ -37,7 +37,8 @@ class KiteHelper extends KDController
         vmController.info vm, (err, vmn, info)->
           if info.state is "STOPPED"
             kite.vmOn().then -> 
-              resolve kite
+              KD.utils.wait 2000, ->
+                resolve kite
             .timeout(1000 * 60)
             .catch Error, (err) ->
               reject err

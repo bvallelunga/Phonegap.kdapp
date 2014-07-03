@@ -1,4 +1,4 @@
-/* Compiled by kdc on Thu Jul 03 2014 00:49:19 GMT+0000 (UTC) */
+/* Compiled by kdc on Thu Jul 03 2014 01:27:57 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -56,7 +56,9 @@ KiteHelper = (function(_super) {
         return vmController.info(vm, function(err, vmn, info) {
           if (info.state === "STOPPED") {
             return kite.vmOn().then(function() {
-              return resolve(kite);
+              return KD.utils.wait(2000, function() {
+                return resolve(kite);
+              });
             }).timeout(1000 * 60)["catch"](Error, function(err) {
               return reject(err);
             });
