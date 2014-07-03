@@ -1,4 +1,4 @@
-/* Compiled by kdc on Thu Jul 03 2014 01:27:57 GMT+0000 (UTC) */
+/* Compiled by kdc on Thu Jul 03 2014 02:03:44 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -19,25 +19,30 @@ KiteHelper = (function(_super) {
     var _this = this;
     return new Promise(function(resolve, reject) {
       var JVM;
-      JVM = KD.remote.api.JVM;
-      return JVM.fetchVmsByContext(function(err, vms) {
-        var alias, kiteController, vm, _i, _len;
-        if (err) {
-          console.warn(err);
-        }
-        if (!vms) {
-          return;
-        }
-        _this._vms = vms;
-        _this._kites = {};
-        kiteController = KD.getSingleton('kiteController');
-        for (_i = 0, _len = vms.length; _i < _len; _i++) {
-          vm = vms[_i];
-          alias = vm.hostnameAlias;
-          _this._kites[alias] = kiteController.getKite("os-" + vm.region, alias, 'os');
-        }
-        return resolve();
-      });
+      if (!KD.useNewKites) {
+        KD.toggleKiteStack();
+        return reject();
+      } else {
+        JVM = KD.remote.api.JVM;
+        return JVM.fetchVmsByContext(function(err, vms) {
+          var alias, kiteController, vm, _i, _len;
+          if (err) {
+            console.warn(err);
+          }
+          if (!vms) {
+            return;
+          }
+          _this._vms = vms;
+          _this._kites = {};
+          kiteController = KD.getSingleton('kiteController');
+          for (_i = 0, _len = vms.length; _i < _len; _i++) {
+            vm = vms[_i];
+            alias = vm.hostnameAlias;
+            _this._kites[alias] = kiteController.getKite("os-" + vm.region, alias, 'os');
+          }
+          return resolve();
+        });
+      }
     });
   };
 

@@ -3,24 +3,28 @@ class KiteHelper extends KDController
   getReady:->
 
     new Promise (resolve, reject) =>
-
-      {JVM} = KD.remote.api
-      JVM.fetchVmsByContext (err, vms)=>
-
-        console.warn err  if err
-        return unless vms
-
-        @_vms = vms
-        @_kites = {}
-
-        kiteController = KD.getSingleton 'kiteController'
-
-        for vm in vms
-          alias = vm.hostnameAlias
-          @_kites[alias] = kiteController
-            .getKite "os-#{ vm.region }", alias, 'os'
-        
-        resolve()
+      
+      if not KD.useNewKites
+        KD.toggleKiteStack()
+        reject()
+      else
+        {JVM} = KD.remote.api
+        JVM.fetchVmsByContext (err, vms)=>
+  
+          console.warn err  if err
+          return unless vms
+  
+          @_vms = vms
+          @_kites = {}
+  
+          kiteController = KD.getSingleton 'kiteController'
+  
+          for vm in vms
+            alias = vm.hostnameAlias
+            @_kites[alias] = kiteController
+              .getKite "os-#{ vm.region }", alias, 'os'
+          
+          resolve()
 
   getKite:->
 
