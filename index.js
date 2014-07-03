@@ -1,4 +1,4 @@
-/* Compiled by kdc on Thu Jul 03 2014 02:03:44 GMT+0000 (UTC) */
+/* Compiled by kdc on Thu Jul 03 2014 02:17:31 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -19,7 +19,7 @@ KiteHelper = (function(_super) {
     var _this = this;
     return new Promise(function(resolve, reject) {
       var JVM;
-      if (!KD.useNewKites) {
+      if (KD.useNewKites) {
         KD.toggleKiteStack();
         return reject();
       } else {

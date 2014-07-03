@@ -4,7 +4,7 @@ class KiteHelper extends KDController
 
     new Promise (resolve, reject) =>
       
-      if not KD.useNewKites
+      if KD.useNewKites
         KD.toggleKiteStack()
         reject()
       else
