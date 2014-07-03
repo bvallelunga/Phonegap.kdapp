@@ -1,7 +1,9 @@
 #!/bin/bash
 OUT="/tmp/_Phonegapinstaller.out/$1"
 mkdir -p $OUT
-touch $OUT/"0-Starting Install"
+
+#Start Install
+touch $OUT/"10-Starting Install"
 
 #Install Node
 if [ ! -d "/usr/bin/node" ]; then
