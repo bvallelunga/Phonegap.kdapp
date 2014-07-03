@@ -1,4 +1,4 @@
-/* Compiled by kdc on Wed Jul 02 2014 19:38:35 GMT+0000 (UTC) */
+/* Compiled by kdc on Thu Jul 03 2014 00:21:29 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/bvallelunga/Applications/Phonegap.kdapp/index.coffee */
@@ -52,10 +52,16 @@ KiteHelper = (function(_super) {
             message: "No such kite for " + vm
           });
         }
-        return kite.vmOn().then(function() {
-          return resolve(kite);
-        }).timeout(1000 * 120)["catch"](Error, function(err) {
-          return reject(err);
+        return kite.vmInfo().then(function(info) {
+          if (info.state !== "RUNNING") {
+            return kite.vmOn().then(function() {
+              return resolve(kite);
+            }).timeout(1000 * 120)["catch"](Error, function(err) {
+              return reject(err);
+            });
+          } else {
+            return resolve(kite);
+          }
         });
       });
     });
