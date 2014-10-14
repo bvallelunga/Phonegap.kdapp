@@ -25,7 +25,7 @@ if [ ! -d "~/PhoneGap/hello" ]; then
 
   #Create Demo Project
   touch $OUT/"90-Creating PhoneGap Project"
-  /usr/bin/phonegap create ~/PhoneGap/hello com.$2.hello HelloWorld
+  /usr/local/bin/phonegap create ~/PhoneGap/hello com.$2.hello HelloWorld
 
 fi
 
